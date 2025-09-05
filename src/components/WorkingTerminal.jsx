@@ -402,10 +402,10 @@ const WorkingTerminal = () => {
       transition={{ duration: 0.8, delay: 0.7 }}
       className="working-terminal"
       style={{
-        width: '700px',
-        height: '420px',
+        width: 'clamp(320px, 90vw, 700px)',
+        height: 'clamp(300px, 50vh, 420px)',
         backgroundColor: '#000000',
-        borderRadius: '18px',
+        borderRadius: 'clamp(12px, 3vw, 18px)',
         border: '3px solid #00ffff',
         boxShadow: `
           0 0 30px rgba(0, 255, 255, 0.5),
@@ -422,23 +422,23 @@ const WorkingTerminal = () => {
       <div 
         className="terminal-header"
         style={{
-          height: '40px',
+          height: 'clamp(30px, 8vw, 40px)',
           background: 'linear-gradient(90deg, #1a1a1a, #2a2a2a)',
           borderBottom: '2px solid #00ffff',
           display: 'flex',
           alignItems: 'center',
-          paddingLeft: '16px',
-          gap: '8px'
+          paddingLeft: 'clamp(8px, 3vw, 16px)',
+          gap: 'clamp(4px, 2vw, 8px)'
         }}
       >
-        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ff5f56' }} />
-        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ffbd2e' }} />
-        <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#27ca3f' }} />
-        <span style={{ marginLeft: '16px', color: '#00ffff', fontSize: '14px', fontFamily: 'monospace' }}>
+        <div style={{ width: 'clamp(8px, 3vw, 12px)', height: 'clamp(8px, 3vw, 12px)', borderRadius: '50%', backgroundColor: '#ff5f56' }} />
+        <div style={{ width: 'clamp(8px, 3vw, 12px)', height: 'clamp(8px, 3vw, 12px)', borderRadius: '50%', backgroundColor: '#ffbd2e' }} />
+        <div style={{ width: 'clamp(8px, 3vw, 12px)', height: 'clamp(8px, 3vw, 12px)', borderRadius: '50%', backgroundColor: '#27ca3f' }} />
+        <span style={{ marginLeft: 'clamp(8px, 3vw, 16px)', color: '#00ffff', fontSize: 'clamp(10px, 2.5vw, 14px)', fontFamily: 'monospace' }}>
           terminal@c-square-club
         </span>
         {!isActive && (
-          <span style={{ marginLeft: 'auto', marginRight: '16px', color: '#888', fontSize: '12px' }}>
+          <span style={{ marginLeft: 'auto', marginRight: 'clamp(8px, 3vw, 16px)', color: '#888', fontSize: 'clamp(8px, 2vw, 12px)', display: window.innerWidth > 480 ? 'block' : 'none' }}>
             Click to interact →
           </span>
         )}
@@ -449,10 +449,10 @@ const WorkingTerminal = () => {
         ref={terminalRef}
         className="terminal-content"
         style={{
-          padding: '20px',
-          height: 'calc(100% - 40px)',
+          padding: 'clamp(10px, 4vw, 20px)',
+          height: 'calc(100% - clamp(30px, 8vw, 40px))',
           fontFamily: 'Consolas, Monaco, monospace',
-          fontSize: '14px',
+          fontSize: 'clamp(10px, 2.5vw, 14px)',
           lineHeight: '1.4',
           overflowY: 'auto',
           overflowX: 'hidden'
@@ -474,8 +474,8 @@ const WorkingTerminal = () => {
 
         {/* Current Input Line */}
         {isActive && (
-          <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center' }}>
-            <span style={{ color: '#00ffff', marginRight: '8px' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+            <span style={{ color: '#00ffff', marginRight: '8px', fontSize: 'clamp(10px, 2.5vw, 14px)' }}>
               guest@c-square-club:{currentPath}$
             </span>
             <input
@@ -490,14 +490,16 @@ const WorkingTerminal = () => {
                 outline: 'none',
                 color: '#00ff41',
                 fontFamily: 'Consolas, Monaco, monospace',
-                fontSize: '14px',
-                flex: 1
+                fontSize: 'clamp(10px, 2.5vw, 14px)',
+                flex: 1,
+                minWidth: '100px'
               }}
               autoComplete="off"
               spellCheck="false"
             />
             <span style={{ 
               color: '#00ff41', 
+              fontSize: 'clamp(10px, 2.5vw, 14px)',
               opacity: showCursor ? 1 : 0,
               transition: 'opacity 0.1s'
             }}>

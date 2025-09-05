@@ -2,7 +2,7 @@ import Hero from '../components/sections/Hero';
 import Achievements from '../components/sections/Achievements';
 import EventsSectionHorizontal from '../components/sections/EventsSectionHorizontal';
 import TeamSectionHorizontal from '../components/sections/TeamSectionHorizontal';
-import PhotoGallery from '../components/PhotoGallery';
+import PhotoGalleryResponsive from '../components/PhotoGalleryResponsive';
 
 const Home = () => {
   return (
@@ -13,7 +13,7 @@ const Home = () => {
       {/* Photo Gallery Section */}
       <section className="py-20 relative overflow-hidden">
         <div className="container-custom">
-          <PhotoGallery />
+          <PhotoGalleryResponsive />
         </div>
       </section>
       

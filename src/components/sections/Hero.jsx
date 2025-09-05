@@ -6,7 +6,7 @@ const Hero = () => {
     <section 
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{ 
-        padding: '120px 48px 48px 48px',
+        padding: '120px 20px 48px 20px',
         background: 'linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%)',
         position: 'relative'
       }}
@@ -66,15 +66,15 @@ const Hero = () => {
       </div>
 
       {/* Main Content Container */}
-      <div className="hero-content flex items-center justify-between w-full max-w-screen-2xl mx-auto z-10">
+      <div className="hero-content flex flex-col lg:flex-row items-center justify-between w-full max-w-screen-2xl mx-auto z-10 gap-8 lg:gap-12">
         
         {/* Left Side - Logo and Title */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8 }}
-          className="hero-left flex items-center gap-8"
-          style={{ flex: '0 0 auto' }}
+          className="hero-left flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-center sm:text-left"
+          style={{ flex: '1 1 auto' }}
         >
           {/* 3D Square Logo */}
           <motion.div
@@ -83,19 +83,19 @@ const Hero = () => {
             transition={{ duration: 1, delay: 0.3 }}
             className="logo-container relative"
             style={{
-              width: '170px',
-              height: '170px',
+              width: 'clamp(120px, 15vw, 170px)',
+              height: 'clamp(120px, 15vw, 170px)',
               perspective: '1000px'
             }}
           >
             <div 
               className="logo-square relative overflow-hidden flex items-center justify-center"
               style={{
-                width: '170px',
-                height: '170px',
+                width: '100%',
+                height: '100%',
                 background: 'linear-gradient(135deg, #ffffff, #f0f0f0, #e0e0e0, #ffffff)',
                 backgroundSize: '300% 300%',
-                borderRadius: '18px',
+                borderRadius: 'clamp(12px, 2vw, 18px)',
                 boxShadow: `
                   0 0 40px rgba(255, 255, 255, 0.4),
                   0 0 80px rgba(0, 255, 255, 0.3),
@@ -123,7 +123,7 @@ const Hero = () => {
                 className="logo-c relative z-10"
                 style={{
                   fontFamily: 'Orbitron, monospace',
-                  fontSize: '5.5rem',
+                  fontSize: 'clamp(3rem, 8vw, 5.5rem)',
                   fontWeight: '900',
                   color: '#000000',
                   textShadow: '3px 3px 6px rgba(0, 0, 0, 0.3)'
@@ -139,14 +139,14 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="hero-text"
+            className="hero-text flex-1"
             style={{ alignSelf: 'center' }}
           >
             <h1 
               className="club-title"
               style={{
                 fontFamily: 'Orbitron, monospace',
-                fontSize: '60px',
+                fontSize: 'clamp(2.5rem, 8vw, 60px)',
                 fontWeight: '900',
                 background: 'linear-gradient(45deg, #00ffff, #ffffff, #ff00ff)',
                 backgroundSize: '200% 200%',
@@ -155,9 +155,9 @@ const Hero = () => {
                 backgroundClip: 'text',
                 animation: 'titleGradient 3s ease infinite',
                 textShadow: '0 0 40px rgba(0, 255, 255, 0.5)',
-                lineHeight: '1',
+                lineHeight: '1.1',
                 marginBottom: '8px',
-                letterSpacing: '2px'
+                letterSpacing: 'clamp(1px, 0.3vw, 2px)'
               }}
             >
               C SQUARE
@@ -166,10 +166,10 @@ const Hero = () => {
               className="club-subtitle"
               style={{
                 fontFamily: 'Rajdhani, sans-serif',
-                fontSize: '22px',
+                fontSize: 'clamp(1rem, 3vw, 22px)',
                 fontWeight: '600',
                 color: '#cccccc',
-                letterSpacing: '6px',
+                letterSpacing: 'clamp(2px, 1vw, 6px)',
                 textTransform: 'uppercase',
                 marginLeft: '4px'
               }}
@@ -184,10 +184,12 @@ const Hero = () => {
           initial={{ opacity: 0, x: 50, scale: 0.9 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="hero-right"
-          style={{ flex: '0 0 auto', marginLeft: '48px' }}
+          className="hero-right w-full lg:w-auto"
+          style={{ flex: '0 0 auto', maxWidth: '100%' }}
         >
-          <WorkingTerminal />
+          <div className="w-full lg:w-auto">
+            <WorkingTerminal />
+          </div>
         </motion.div>
       </div>
 

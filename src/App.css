@@ -235,6 +235,7 @@
     -webkit-overflow-scrolling: touch !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
+    gap: 1rem !important;
   }
   
   .events-track::-webkit-scrollbar {
@@ -257,13 +258,15 @@
     -webkit-overflow-scrolling: touch !important;
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
+    gap: 1rem !important;
   }
   
   .team-track::-webkit-scrollbar {
     display: none !important;
   }
   
-  .team-card {
+  .team-card,
+  .team-member-card {
     min-width: 250px !important;
     scroll-snap-align: start !important;
     margin-right: 15px !important;
@@ -271,6 +274,21 @@
   
   .team-nav-btn {
     display: none !important; /* Hide navigation buttons on mobile */
+  }
+  
+  /* Hide scrollbar for webkit browsers */
+  .events-track::-webkit-scrollbar,
+  .team-track::-webkit-scrollbar {
+    width: 0px !important;
+    height: 0px !important;
+    background: transparent !important;
+  }
+  
+  /* Smooth scrolling for touch devices */
+  .events-track,
+  .team-track {
+    scroll-behavior: smooth !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 }
 
@@ -280,7 +298,8 @@
     margin-right: 12px !important;
   }
   
-  .team-card {
+  .team-card,
+  .team-member-card {
     min-width: 230px !important;
     margin-right: 12px !important;
   }
@@ -293,6 +312,12 @@
   .container-custom {
     padding: 0 15px !important;
   }
+  
+  /* Reduce gaps even more on very small devices */
+  .events-track,
+  .team-track {
+    gap: 0.75rem !important;
+  }
 }
 
 /* Medium devices - tablet styles */
@@ -301,7 +326,8 @@
     min-width: 320px !important;
   }
   
-  .team-card {
+  .team-card,
+  .team-member-card {
     min-width: 280px !important;
   }
   
@@ -310,5 +336,47 @@
     width: 45px !important;
     height: 45px !important;
     font-size: 1.3rem !important;
+  }
+}
+
+/* Additional responsive improvements for Achievement section */
+@media (max-width: 768px) {
+  .achievements-section .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 1rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .achievements-section .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+  
+  .achievements-section .card {
+    padding: 1rem !important;
+  }
+}
+
+/* Hero section responsive improvements */
+@media (max-width: 768px) {
+  .hero-content {
+    gap: 2rem !important;
+    padding: 0 1rem !important;
+  }
+  
+  .hero-left {
+    text-align: center !important;
+  }
+  
+  .hero-right {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content {
+    gap: 1.5rem !important;
+    padding: 0 0.75rem !important;
   }
 }

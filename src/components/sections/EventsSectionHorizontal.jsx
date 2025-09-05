@@ -166,13 +166,14 @@ const EventsSectionHorizontal = () => {
           </motion.div>
         ) : (
           <div className="relative">
-            {/* Navigation Instructions */}
+            {/* Navigation Instructions - Updated for mobile */}
             <p className="text-center text-gray-400 mb-8 text-sm">
-              👆 Drag to explore events or use navigation buttons
+              <span className="hidden md:inline">👆 Drag to explore events or use navigation buttons</span>
+              <span className="md:hidden">👆 Swipe to explore events</span>
             </p>
 
-            {/* Navigation Buttons */}
-            <div className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 flex justify-between pointer-events-none z-20">
+            {/* Navigation Buttons - Hidden on mobile */}
+            <div className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 justify-between pointer-events-none z-20 hidden md:flex">
               <button
                 onClick={scrollLeftBtn}
                 className="pointer-events-auto bg-black/80 hover:bg-black/90 border-2 border-neon-cyan text-neon-cyan hover:text-white transition-all duration-300 rounded-full p-3 ml-4 shadow-lg hover:shadow-neon-cyan/30"
@@ -196,11 +197,13 @@ const EventsSectionHorizontal = () => {
             {/* Events Slider Track */}
             <div
               ref={trackRef}
-              className="events-track flex gap-6 overflow-x-auto overflow-y-hidden cursor-grab select-none py-4"
+              className="events-track flex gap-4 md:gap-6 overflow-x-auto overflow-y-hidden cursor-grab select-none py-4 scroll-smooth"
               style={{
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none',
-                WebkitScrollbar: { display: 'none' }
+                WebkitScrollbar: { display: 'none' },
+                scrollSnapType: 'x mandatory',
+                WebkitOverflowScrolling: 'touch'
               }}
               onMouseDown={handleMouseDown}
               onMouseUp={handleMouseUp}
@@ -219,8 +222,9 @@ const EventsSectionHorizontal = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="event-card flex-shrink-0 relative"
                   style={{
-                    width: '350px',
-                    height: '480px'
+                    width: 'clamp(280px, 85vw, 350px)',
+                    height: 'clamp(400px, 60vh, 480px)',
+                    scrollSnapAlign: 'start'
                   }}
                   draggable={false}
                 >
@@ -228,7 +232,7 @@ const EventsSectionHorizontal = () => {
                   <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group">
                     
                     {/* Event Image */}
-                    <div className="relative h-48 overflow-hidden">
+                    <div className="relative h-32 sm:h-40 md:h-48 overflow-hidden">
                       {event.image ? (
                         <img 
                           src={event.image} 
@@ -248,7 +252,7 @@ const EventsSectionHorizontal = () => {
                       </div>
                       
                       {/* Event Type Badge */}
-                      <div className={`absolute top-4 right-4 px-2 py-1 rounded-full text-xs font-medium ${
+                      <div className={`absolute top-2 sm:top-3 md:top-4 right-2 sm:right-3 md:right-4 px-2 py-1 rounded-full text-[10px] sm:text-xs font-medium ${
                         event.type === 'upcoming'
                           ? 'bg-green-500 text-white'
                           : 'bg-gray-500 text-white'
@@ -261,9 +265,9 @@ const EventsSectionHorizontal = () => {
                     </div>
 
                     {/* Event Content */}
-                    <div className="p-6 flex flex-col h-72">
+                    <div className="p-3 sm:p-4 md:p-6 flex flex-col" style={{ height: 'calc(100% - 8rem)' }}>
                       {/* Date, Time and Location */}
-                      <div className="text-sm text-gray-600 mb-3 flex justify-between">
+                      <div className="text-xs sm:text-sm text-gray-600 mb-2 flex justify-between">
                         <span className="font-medium">
                           {new Date(event.date).toLocaleDateString('en-US', {
                             month: 'short',
@@ -278,22 +282,22 @@ const EventsSectionHorizontal = () => {
                       </div>
                       
                       {/* Event Title */}
-                      <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-gray-700 transition-colors duration-300">
+                      <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-gray-700 transition-colors duration-300">
                         {event.title}
                       </h3>
                       
                       {/* Description */}
-                      <p className="text-gray-700 text-sm mb-4 line-clamp-3 flex-grow">
+                      <p className="text-gray-700 text-xs sm:text-sm mb-3 line-clamp-3 flex-grow">
                         {event.description}
                       </p>
                       
                       {/* Tags */}
                       {event.tags && event.tags.length > 0 && (
-                        <div className="mb-4 flex flex-wrap gap-2">
+                        <div className="mb-3 flex flex-wrap gap-1 sm:gap-2">
                           {event.tags.slice(0, 3).map((tag, tagIndex) => (
                             <span 
                               key={tagIndex}
-                              className="text-xs px-3 py-1 rounded-full text-white font-medium"
+                              className="text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-full text-white font-medium"
                               style={{ 
                                 background: tagIndex === 0 ? '#0033ff' : 
                                            tagIndex === 1 ? '#29bf12' : '#ff6b35'
@@ -312,13 +316,13 @@ const EventsSectionHorizontal = () => {
                             href={event.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="w-full bg-gray-800 hover:bg-gray-900 text-white rounded-md py-3 px-4 font-semibold text-center block transition-colors duration-300"
+                            className="w-full bg-gray-800 hover:bg-gray-900 text-white rounded-md py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm md:text-base font-semibold text-center block transition-colors duration-300"
                             onClick={(e) => e.stopPropagation()}
                           >
                             {event.linkText || 'Register'} →
                           </a>
                         ) : (
-                          <button className="w-full bg-gray-400 text-white rounded-md py-3 px-4 font-semibold cursor-not-allowed">
+                          <button className="w-full bg-gray-400 text-white rounded-md py-2 sm:py-3 px-3 sm:px-4 text-xs sm:text-sm md:text-base font-semibold cursor-not-allowed">
                             {event.type === 'upcoming' ? 'Coming Soon' : 'Completed'}
                           </button>
                         )}
@@ -374,6 +378,18 @@ const EventsSectionHorizontal = () => {
           -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
           overflow: hidden;
+        }
+        
+        /* Mobile-specific styles for better touch scrolling */
+        @media (max-width: 768px) {
+          .events-track {
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+          }
+          
+          .event-card {
+            scroll-snap-align: start;
+          }
         }
       `}</style>
     </section>

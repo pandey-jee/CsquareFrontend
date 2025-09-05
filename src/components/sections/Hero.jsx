@@ -6,7 +6,7 @@ const Hero = () => {
     <section 
       className="relative min-h-screen flex items-center overflow-hidden"
       style={{ 
-        padding: '120px 20px 48px 20px',
+        padding: '140px 20px 48px 20px',
         background: 'linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%)',
         position: 'relative'
       }}
@@ -184,10 +184,10 @@ const Hero = () => {
           initial={{ opacity: 0, x: 50, scale: 0.9 }}
           animate={{ opacity: 1, x: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.7 }}
-          className="hero-right w-full lg:w-auto"
+          className="hero-right w-full lg:w-auto flex justify-center"
           style={{ flex: '0 0 auto', maxWidth: '100%' }}
         >
-          <div className="w-full lg:w-auto">
+          <div className="w-full lg:w-auto flex justify-center">
             <WorkingTerminal />
           </div>
         </motion.div>

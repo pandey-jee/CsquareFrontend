@@ -55,10 +55,10 @@ const Achievements = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl sm:text-5xl font-orbitron font-bold mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-orbitron font-bold mb-4 sm:mb-6">
             <span className="neon-text">Our Achievements</span>
           </h2>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto">
             Building the future through innovation, collaboration, and cutting-edge technology
           </p>
         </motion.div>
@@ -79,22 +79,22 @@ const Achievements = () => {
               className="card group cursor-pointer"
             >
               {/* Icon */}
-              <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">
+              <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4 group-hover:scale-110 transition-transform duration-300">
                 {achievement.icon}
               </div>
 
               {/* Stats */}
-              <div className="text-3xl font-orbitron font-bold text-neon-cyan mb-2 group-hover:text-neon-magenta transition-colors duration-300">
+              <div className="text-xl sm:text-2xl md:text-3xl font-orbitron font-bold text-neon-cyan mb-1 sm:mb-2 group-hover:text-neon-magenta transition-colors duration-300">
                 {achievement.stats}
               </div>
 
               {/* Title */}
-              <h3 className="text-xl font-bold text-white mb-3 group-hover:text-neon-cyan transition-colors duration-300">
+              <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-2 sm:mb-3 group-hover:text-neon-cyan transition-colors duration-300">
                 {achievement.title}
               </h3>
 
               {/* Description */}
-              <p className="text-gray-300 group-hover:text-gray-200 transition-colors duration-300">
+              <p className="text-sm sm:text-base text-gray-300 group-hover:text-gray-200 transition-colors duration-300">
                 {achievement.description}
               </p>
 

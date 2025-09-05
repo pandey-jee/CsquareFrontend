@@ -12,6 +12,7 @@ import EnhancedBackground from './components/EnhancedBackground';
 import ToastNotification from './components/ToastNotification';
 import NotificationBar from './components/NotificationBar';
 import Footer from './components/Footer';
+import ErrorBoundary from './components/ErrorBoundary';
 import './App.css';
 
 function App() {
@@ -36,29 +37,31 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="App">
-        <CustomCursor />
-        <EnhancedBackground />
-        <ParticleBackground />
-        
-        <ToastNotification />
-        {/* <NotificationBar /> */}
-        <Navbar />
-        
-        <main className="relative z-10">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/team" element={<Team />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/admin" element={<Admin />} />
-          </Routes>
-        </main>
-        
-        <Footer />
-      </div>
-    </Router>
+    <ErrorBoundary>
+      <Router>
+        <div className="App">
+          <CustomCursor />
+          <ParticleBackground />
+          <EnhancedBackground />
+          
+          <ToastNotification />
+          {/* <NotificationBar /> */}
+          <Navbar />
+          
+          <main className="relative z-10">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/events" element={<Events />} />
+              <Route path="/team" element={<Team />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/admin" element={<Admin />} />
+            </Routes>
+          </main>
+          
+          <Footer />
+        </div>
+      </Router>
+    </ErrorBoundary>
   );
 }
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
+import { LoadingSpinner, LoadingCard } from '../components/LoadingSpinner';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
@@ -13,10 +14,12 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
+      setLoading(true);
       const response = await api.get('/events');
       setEvents(response.data.data || []);
     } catch (error) {
       console.error('Failed to fetch events:', error);
+      // You could add a toast notification here
     } finally {
       setLoading(false);
     }
@@ -64,9 +67,18 @@ const Events = () => {
 
           {/* Events Grid */}
           {loading ? (
-            <div className="text-center">
-              <div className="loader mx-auto"></div>
-              <p className="mt-4 text-neon-cyan">Loading events...</p>
+            <LoadingCard count={6} />
+          ) : filteredEvents.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4">📅</div>
+              <h3 className="text-2xl font-orbitron text-neon-cyan mb-2">
+                No {activeTab} events found
+              </h3>
+              <p className="text-gray-400">
+                {activeTab === 'upcoming' 
+                  ? 'Stay tuned for exciting upcoming events!' 
+                  : 'Check back later for past event highlights.'}
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

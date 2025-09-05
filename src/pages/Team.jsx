@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import api from '../utils/api';
+import { LoadingCard } from '../components/LoadingSpinner';
 
 const Team = () => {
   const [teamMembers, setTeamMembers] = useState([]);
@@ -12,6 +13,7 @@ const Team = () => {
 
   const fetchTeamMembers = async () => {
     try {
+      setLoading(true);
       const response = await api.get('/team');
       setTeamMembers(response.data.data || []);
     } catch (error) {
@@ -34,9 +36,16 @@ const Team = () => {
           </h1>
 
           {loading ? (
-            <div className="text-center">
-              <div className="loader mx-auto"></div>
-              <p className="mt-4 text-neon-cyan">Loading team members...</p>
+            <LoadingCard count={6} />
+          ) : teamMembers.length === 0 ? (
+            <div className="text-center py-16">
+              <div className="text-6xl mb-4">👥</div>
+              <h3 className="text-2xl font-orbitron text-neon-cyan mb-2">
+                No team members found
+              </h3>
+              <p className="text-gray-400">
+                Our amazing team will be showcased here soon!
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

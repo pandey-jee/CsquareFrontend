@@ -31,7 +31,7 @@ function App() {
     return (
       <div className="loading-screen">
         <div className="loader"></div>
-        <div className="loading-text">INITIALIZING C-SQUARE NETWORK...</div>
+        <div className="loading-text">INITIALIZING C-SQUARE NETWORK....</div>
       </div>
     );
   }

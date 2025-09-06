@@ -12,6 +12,7 @@ const Navbar = () => {
     { path: '/events', label: 'Events', icon: '📅' },
     { path: '/team', label: 'Team', icon: '👥' },
     { path: '/contact', label: 'Contact', icon: '📧' },
+    { path: '/admin', label: 'Admin', icon: '⚙️' },
   ];
 
   useEffect(() => {
@@ -89,6 +90,30 @@ const Navbar = () => {
                 </li>
               ))}
               
+              {/* Admin Button */}
+              <li style={{ marginLeft: '32px' }}>
+                <Link
+                  to="/admin"
+                  className="admin-button relative transition-all duration-300 flex items-center justify-center"
+                  style={{
+                    width: '120px',
+                    height: '38px',
+                    background: 'linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(255, 0, 255, 0.3))',
+                    border: '2px solid #ff00ff',
+                    color: '#ff00ff',
+                    borderRadius: '19px',
+                    fontSize: '14px',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    backdropFilter: 'blur(10px)',
+                    boxShadow: '0 4px 15px rgba(255, 0, 255, 0.2)',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px'
+                  }}
+                >
+                  Admin
+                </Link>
+              </li>
             </ul>
 
             {/* Mobile Menu Toggle */}
@@ -111,7 +136,7 @@ const Navbar = () => {
       <MobileMenu 
         isOpen={isMobileMenuOpen} 
         onClose={closeMobileMenu} 
-        navItems={navItems}
+        navItems={[...navItems, { path: '/admin', label: 'Admin', icon: '🛠️', isAdmin: true }]}
       />
     </>
   );

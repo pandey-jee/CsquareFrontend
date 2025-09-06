@@ -454,7 +454,7 @@ const Admin = () => {
               {/* Quick Overview */}
               <div className="p-6 bg-black/40 rounded-xl border border-gray-700">
                 <h2 className="text-2xl font-orbitron font-bold text-white mb-6 text-center sm:text-left flex items-center gap-2">
-                  <img src="icon.png" alt="Stats Icon" className="inline w-7 h-7" />
+                  <img src="icon.png" alt="Stats Icon" className="inline w-7 h-7 object-cover" />
                   Quick Overview
                 </h2>
                 <div className="grid grid-cols-2 lg:grid-cols-2 gap-6">

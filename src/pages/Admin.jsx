@@ -9,6 +9,8 @@ const Admin = () => {
   const [events, setEvents] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [galleryItems, setGalleryItems] = useState([]);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [isLocked, setIsLocked] = useState(false);
   const [newEvent, setNewEvent] = useState({
     type: 'upcoming',
     date: '',
@@ -63,16 +65,60 @@ const Admin = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
+    // Check if locked due to too many attempts
+    if (isLocked) {
+      setStatus({ type: 'error', message: 'Please wait before trying again.' });
+      return;
+    }
+    
+    // Input validation
+    if (!credentials.username.trim() || !credentials.password.trim()) {
+      setStatus({ type: 'error', message: 'Please enter both username and password' });
+      return;
+    }
+    
+    // Basic input sanitization
+    const sanitizedCredentials = {
+      username: credentials.username.trim().toLowerCase(),
+      password: credentials.password.trim()
+    };
+    
     setLoading(true);
+    setStatus({ type: '', message: '' });
+    
     try {
-      const response = await api.post('/auth/login', credentials);
+      const response = await api.post('/auth/login', sanitizedCredentials);
       const { token } = response.data.data;
       localStorage.setItem('adminToken', token);
       setIsAuthenticated(true);
       fetchData();
       setStatus({ type: 'success', message: 'Login successful!' });
+      // Clear credentials from memory for security
+      setCredentials({ username: '', password: '' });
+      // Reset failed attempts on successful login
+      setLoginAttempts(0);
+      setIsLocked(false);
     } catch (error) {
-      setStatus({ type: 'error', message: 'Invalid credentials' });
+      const newAttempts = loginAttempts + 1;
+      setLoginAttempts(newAttempts);
+      
+      // Lock after 3 failed attempts
+      if (newAttempts >= 3) {
+        setIsLocked(true);
+        // Auto-unlock after 5 minutes
+        setTimeout(() => {
+          setIsLocked(false);
+          setLoginAttempts(0);
+        }, 5 * 60 * 1000);
+        setStatus({ type: 'error', message: 'Too many failed attempts. Account locked for 5 minutes.' });
+      } else {
+        const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
+        setStatus({ type: 'error', message: `${errorMessage} (${newAttempts}/3 attempts)` });
+      }
+      
+      // Clear password field on error
+      setCredentials(prev => ({ ...prev, password: '' }));
     } finally {
       setLoading(false);
     }
@@ -310,7 +356,7 @@ const Admin = () => {
             Admin Login
           </h1>
           
-          <form onSubmit={handleLogin} className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6" autoComplete="off">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Username
@@ -321,6 +367,9 @@ const Admin = () => {
                 onChange={(e) => setCredentials({...credentials, username: e.target.value})}
                 className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
                 required
+                autoComplete="username"
+                maxLength={50}
+                disabled={isLocked}
               />
             </div>
             
@@ -334,8 +383,17 @@ const Admin = () => {
                 onChange={(e) => setCredentials({...credentials, password: e.target.value})}
                 className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
                 required
+                autoComplete="current-password"
+                maxLength={100}
+                disabled={isLocked}
               />
             </div>
+
+            {isLocked && (
+              <div className="p-4 rounded-lg bg-orange-500 bg-opacity-20 border border-orange-500 text-orange-400">
+                ⚠️ Account temporarily locked due to multiple failed attempts. Please try again later.
+              </div>
+            )}
 
             {status.message && (
               <div className={`p-4 rounded-lg ${
@@ -349,8 +407,8 @@ const Admin = () => {
             
             <button
               type="submit"
-              disabled={loading}
-              className={`w-full btn-primary ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={loading || isLocked}
+              className={`w-full btn-primary ${(loading || isLocked) ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {loading ? 'Logging in...' : 'Login'}
             </button>

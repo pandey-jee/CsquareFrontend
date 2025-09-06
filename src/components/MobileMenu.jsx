@@ -121,39 +121,55 @@ const MobileMenu = ({ isOpen, onClose, navItems }) => {
                     animate="open"
                     transition={{ delay: index * 0.1 }}
                   >
-                    <a
-                      href={item.path === '/' ? '#' : 
-                            item.path === '/events' ? '#events' : 
-                            item.path === '/team' ? '#team' : 
-                            item.path === '/contact' ? '#contact' : 
-                            item.path}
-                      onClick={(e) => {
-                        if (item.path === '/') {
-                          e.preventDefault();
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        } else if (item.path === '/events') {
-                          e.preventDefault();
-                          document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
-                        } else if (item.path === '/team') {
-                          e.preventDefault();
-                          document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' });
-                        } else if (item.path === '/contact') {
-                          e.preventDefault();
-                          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                        }
-                        handleLinkClick();
-                      }}
-                      className={`block px-4 py-3 rounded-lg text-lg font-medium transition-all duration-300 ${
-                        item.isAdmin
-                          ? 'bg-gradient-to-r from-neon-magenta/20 to-neon-cyan/20 border border-neon-magenta text-neon-magenta hover:bg-gradient-to-r hover:from-neon-magenta hover:to-neon-cyan hover:text-black'
-                          : 'text-white hover:bg-white hover:bg-opacity-10 hover:text-neon-cyan'
-                      }`}
-                    >
-                      <span className="flex items-center gap-3">
-                        {item.icon && <span>{item.icon}</span>}
-                        {item.label}
-                      </span>
-                    </a>
+                    {item.isAdmin ? (
+                      <a
+                        href={item.path}
+                        onClick={handleLinkClick}
+                        className="block px-4 py-3 rounded-lg text-lg font-medium transition-all duration-300 bg-gradient-to-r from-neon-magenta/20 to-neon-cyan/20 border border-neon-magenta text-neon-magenta hover:bg-gradient-to-r hover:from-neon-magenta hover:to-neon-cyan hover:text-black"
+                      >
+                        <span className="flex items-center gap-3">
+                          {item.icon && <span>{item.icon}</span>}
+                          {item.label}
+                        </span>
+                      </a>
+                    ) : item.path === '/contact' ? (
+                      <a
+                        href={item.path}
+                        onClick={handleLinkClick}
+                        className="block px-4 py-3 rounded-lg text-lg font-medium transition-all duration-300 text-white hover:bg-white hover:bg-opacity-10 hover:text-neon-cyan"
+                      >
+                        <span className="flex items-center gap-3">
+                          {item.icon && <span>{item.icon}</span>}
+                          {item.label}
+                        </span>
+                      </a>
+                    ) : (
+                      <a
+                        href={item.path === '/' ? '#' : 
+                              item.path === '/events' ? '#events' : 
+                              item.path === '/team' ? '#team' : 
+                              item.path}
+                        onClick={(e) => {
+                          if (item.path === '/') {
+                            e.preventDefault();
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          } else if (item.path === '/events') {
+                            e.preventDefault();
+                            document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
+                          } else if (item.path === '/team') {
+                            e.preventDefault();
+                            document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' });
+                          }
+                          handleLinkClick();
+                        }}
+                        className="block px-4 py-3 rounded-lg text-lg font-medium transition-all duration-300 text-white hover:bg-white hover:bg-opacity-10 hover:text-neon-cyan"
+                      >
+                        <span className="flex items-center gap-3">
+                          {item.icon && <span>{item.icon}</span>}
+                          {item.label}
+                        </span>
+                      </a>
+                    )}
                   </motion.li>
                 ))}
               </ul>

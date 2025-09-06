@@ -74,17 +74,46 @@ const Navbar = () => {
             <ul className="nav-links hidden lg:flex items-center">
               {navItems.map((item, index) => (
                 <li key={item.path} style={{ margin: '0 24px' }}>
-                  <Link
-                    to={item.path}
-                    className="nav-link relative font-medium transition-all duration-300 text-white hover:text-neon-cyan"
-                    style={{
-                      fontSize: '16px',
-                      fontWeight: '500',
-                      letterSpacing: '0.5px'
-                    }}
-                  >
-                    {item.label}
-                  </Link>
+                  {item.path === '/contact' ? (
+                    <Link
+                      to={item.path}
+                      className="nav-link relative font-medium transition-all duration-300 text-white hover:text-neon-cyan"
+                      style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        letterSpacing: '0.5px'
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <a
+                      href={item.path === '/' ? '#' : 
+                            item.path === '/events' ? '#events' : 
+                            item.path === '/team' ? '#team' : 
+                            item.path}
+                      onClick={(e) => {
+                        if (item.path === '/') {
+                          e.preventDefault();
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else if (item.path === '/events') {
+                          e.preventDefault();
+                          document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
+                        } else if (item.path === '/team') {
+                          e.preventDefault();
+                          document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' });
+                        }
+                      }}
+                      className="nav-link relative font-medium transition-all duration-300 text-white hover:text-neon-cyan cursor-pointer"
+                      style={{
+                        fontSize: '16px',
+                        fontWeight: '500',
+                        letterSpacing: '0.5px'
+                      }}
+                    >
+                      {item.label}
+                    </a>
+                  )}
                 </li>
               ))}
               

@@ -1,6 +1,20 @@
-import React from "react";
+import React, { useRef } from "react";
 
 export default function EventsSection() {
+  const scrollRef = useRef(null);
+
+  // Navigation functions
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -300, behavior: 'smooth' });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+    }
+  };
   const events = [
     {
       id: 1,
@@ -62,17 +76,28 @@ export default function EventsSection() {
         {/* Swipe / scroll instructions */}
         <p className="text-center text-gray-400 mb-8 text-sm">
           <span className="hidden md:inline">
-            👆 Drag to explore events or use navigation buttons
+            👆 Drag to explore events
           </span>
           <span className="md:hidden">👆 Swipe to explore events</span>
         </p>
 
         {/* Events Track */}
-        <div className="events-track flex gap-4 md:gap-6 overflow-x-auto overflow-y-hidden cursor-grab select-none py-4 md:pb-8 no-scrollbar">
+        <div 
+          ref={scrollRef}
+          className="events-track flex gap-4 md:gap-6 overflow-x-scroll overflow-y-hidden py-4 md:pb-8"
+          style={{
+            scrollSnapType: 'x mandatory',
+            WebkitOverflowScrolling: 'touch',
+            touchAction: 'pan-x',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }}
+        >
           {events.map((event) => (
             <div
               key={event.id}
-              className="event-card flex-shrink-0 relative w-[clamp(240px,80vw,320px)] h-[clamp(360px,55vh,440px)] scroll-snap-align-start"
+              className="event-card flex-shrink-0 relative w-[clamp(240px,80vw,320px)] h-[clamp(360px,55vh,440px)]"
+              style={{ scrollSnapAlign: 'start' }}
             >
               <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col">
                 {/* Image */}
@@ -126,21 +151,10 @@ export default function EventsSection() {
       <div className="absolute bottom-20 left-10 w-16 h-16 border border-neon-cyan opacity-30 rotate-12"></div>
       <div className="absolute top-1/2 right-5 w-2 h-24 bg-gradient-to-b from-transparent via-neon-magenta to-transparent opacity-40"></div>
 
-      {/* Extra styles for mobile */}
+      {/* Hide scrollbar styles */}
       <style jsx>{`
-        .events-track {
-          scroll-snap-type: x mandatory;
-          -webkit-overflow-scrolling: touch;
-        }
-        .event-card {
-          scroll-snap-align: start;
-        }
-        .no-scrollbar::-webkit-scrollbar {
+        .events-track::-webkit-scrollbar {
           display: none;
-        }
-        .no-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
         }
       `}</style>
     </section>

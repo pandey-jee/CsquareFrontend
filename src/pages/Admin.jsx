@@ -409,7 +409,7 @@ const Admin = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
-                  className="card flex flex-col items-center p-6 bg-black/40 rounded-xl border border-gray-700 text-center w-[278px]"
+                  className="card flex flex-col items-center p-6 bg-black/40 rounded-xl border border-gray-700 text-center w-[278px] lg:w-[379px]"
                 >
                   <div className="text-4xl md:text-5xl mb-4">👥</div>
                   <div className="text-3xl md:text-4xl font-orbitron font-bold text-neon-cyan mb-2">

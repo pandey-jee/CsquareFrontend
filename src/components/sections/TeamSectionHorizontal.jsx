@@ -6,9 +6,6 @@ const TeamSection = () => {
   const [teamMembers, setTeamMembers] = useState([]);
   const [loading, setLoading] = useState(true);
   const trackRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
 
   useEffect(() => {
     fetchTeamMembers();
@@ -19,50 +16,13 @@ const TeamSection = () => {
       const response = await api.get('/team');
       setTeamMembers(response.data.data || []);
     } catch (error) {
-      console.error('Failed to fetch team members:', error);
+      console.error('Error fetching team members:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Drag handlers
-  const handleMouseDown = (e) => {
-    setIsDragging(true);
-    setStartX(e.pageX - trackRef.current.offsetLeft);
-    setScrollLeft(trackRef.current.scrollLeft);
-    trackRef.current.style.cursor = 'grabbing';
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    if (trackRef.current) {
-      trackRef.current.style.cursor = 'grab';
-    }
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - trackRef.current.offsetLeft;
-    const walk = (x - startX) * 2;
-    trackRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  // Touch handlers for mobile
-  const handleTouchStart = (e) => {
-    setIsDragging(true);
-    setStartX(e.touches[0].pageX - trackRef.current.offsetLeft);
-    setScrollLeft(trackRef.current.scrollLeft);
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging) return;
-    const x = e.touches[0].pageX - trackRef.current.offsetLeft;
-    const walk = (x - startX) * 2;
-    trackRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  // Navigation button handlers
+  // Navigation button handlers for desktop
   const scrollLeftBtn = () => {
     if (trackRef.current) {
       trackRef.current.scrollBy({ left: -340, behavior: 'smooth' });
@@ -89,13 +49,13 @@ const TeamSection = () => {
   }
 
   return (
-    <section id="team" className="py-20 relative overflow-hidden">
+    <section id="team" className="py-20 relative">
       {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900">
         <div className="absolute inset-0 bg-gradient-to-r from-neon-cyan/5 via-transparent to-neon-magenta/5"></div>
       </div>
 
-      <div className="container-custom relative z-10">
+      <div className="container-custom relative z-10" style={{ overflowX: 'visible' }}>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -127,14 +87,14 @@ const TeamSection = () => {
             </p>
           </motion.div>
         ) : (
-          <div className="relative">
-            {/* Drag instruction - Updated for mobile */}
+          <div className="relative" style={{ overflowX: 'visible' }}>
+            {/* Drag instruction */}
             <p className="text-center text-gray-400 mb-8 text-sm">
-              <span className="hidden md:inline">👆 Drag to explore our team or use navigation buttons</span>
-              <span className="md:hidden">👆 Swipe to explore our team</span>
+              <span className="hidden md:inline">👆 Drag to explore our team</span>
+              <span className="md:hidden">👆 Swipe through team members</span>
             </p>
 
-            {/* Navigation Buttons - Hidden on mobile */}
+            {/* Navigation Buttons - Desktop only */}
             <div className="absolute left-0 right-0 top-1/2 transform -translate-y-1/2 justify-between pointer-events-none z-20 hidden md:flex">
               <button
                 onClick={scrollLeftBtn}
@@ -155,45 +115,34 @@ const TeamSection = () => {
                 </svg>
               </button>
             </div>
-            
-            {/* Team Slider Track */}
+
+            {/* Desktop Team Slider Track */}
             <div
               ref={trackRef}
-              className="team-track flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden cursor-grab select-none py-4"
+              className="team-track hidden md:flex"
               style={{
-                scrollbarWidth: 'thin',
-                scrollbarColor: '#ff00ff transparent',
-                scrollBehavior: 'smooth',
+                gap: '1rem',
+                overflowX: 'scroll',
+                overflowY: 'hidden',
+                padding: '1rem 0',
+                paddingBottom: '20px',
                 scrollSnapType: 'x mandatory',
                 WebkitOverflowScrolling: 'touch',
-                paddingBottom: '20px'
+                touchAction: 'pan-x',
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none',
+                width: '100%'
               }}
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
-              onMouseMove={handleMouseMove}
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleMouseUp}
-              onTouchMove={handleTouchMove}
             >
               {teamMembers.map((member, index) => (
-                <motion.div
+                <div
                   key={member.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="team-member-card flex-shrink-0 relative"
-                  style={{
-                    width: 'clamp(250px, 80vw, 320px)',
-                    height: 'clamp(360px, 55vh, 450px)',
-                    scrollSnapAlign: 'start'
-                  }}
-                  draggable={false}
+                  className="team-member-card flex-shrink-0 relative w-[clamp(240px,80vw,320px)] h-[clamp(360px,55vh,440px)]"
+                  style={{ scrollSnapAlign: 'start' }}
                 >
                   {/* Card Background */}
                   <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border-2 border-gray-700 hover:border-neon-cyan transition-all duration-300 group flex flex-col">
-                    
+
                     {/* Member Photo Section - 3/4 of the card height */}
                     <div className="relative flex-[3] overflow-hidden">
                       {member.photo ? (
@@ -201,22 +150,21 @@ const TeamSection = () => {
                           src={member.photo}
                           alt={member.name}
                           className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
-                          draggable={false}
                           onError={(e) => {
                             e.target.style.display = 'none';
-                            e.target.nextSibling.style.display = 'flex';
+                            e.target.parentElement.querySelector('.initials-fallback').style.display = 'flex';
                           }}
                         />
                       ) : null}
-                      <div className={`${member.photo ? 'hidden' : 'flex'} w-full h-full bg-gradient-to-br from-neon-cyan/20 to-neon-magenta/20 items-center justify-center`}>
+                      <div className={`initials-fallback ${member.photo ? 'hidden' : 'flex'} w-full h-full bg-gradient-to-br from-neon-cyan/20 to-neon-magenta/20 items-center justify-center`}>
                         <span className="text-6xl font-bold text-white">
                           {member.initials || member.name.split(' ').map(n => n[0]).join('')}
                         </span>
                       </div>
-                      
+
                       {/* Overlay gradient */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                      
+
                       {/* Hover overlay */}
                       <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-neon-magenta/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
@@ -234,7 +182,7 @@ const TeamSection = () => {
                           {member.bio}
                         </p>
                       </div>
-                      
+
                       {/* Social Links */}
                       {(member.email || member.linkedin || member.github) && (
                         <div className="flex justify-start space-x-3 sm:space-x-4 mt-2">
@@ -280,9 +228,84 @@ const TeamSection = () => {
                       )}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
+
+            {/* Mobile CSS-Only Carousel */}
+            <section className="team-carousel md:hidden w-full flex justify-center items-center h-[360px]" aria-label="Team Members">
+              <div className="team-carousel__viewport overflow-x-scroll  scroll-snap-x mandatory flex gap-4 p-2 w-full item max-w-screen-sm items-center">
+                {teamMembers.map((member, index) => (
+                  <div
+                    key={member.id}
+                    id={`team__slide${index + 1}`}
+                    tabIndex="0"
+                    className="team-member-card flex-shrink-0 relative
+          max-w-[280px] max-h-[360px] w-[clamp(180px,75vw,245px)] h-[clamp(320px,50vh,360px)]
+          scroll-snap-align-start"
+                  >
+                    <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black rounded-2xl 
+          overflow-hidden border-2 border-gray-700 hover:border-neon-cyan transition-all duration-300 group flex flex-col">
+                      <div className="relative flex-[3] overflow-hidden p-1">
+                        {member.photo ? (
+                          <img
+                            src={member.photo}
+                            alt={member.name}
+                            className="w-full h-full object-contain object-center transition-transform duration-300 group-hover:scale-105"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.parentElement.querySelector('.initials-fallback').classList.remove('hidden');
+                            }}
+                          />
+                        ) : null}
+                        <div className={`initials-fallback ${member.photo ? 'hidden' : 'flex'} w-full h-full 
+              bg-gradient-to-br from-neon-cyan/25 to-neon-magenta/20 items-center justify-center`}>
+                          <span className="text-4xl font-bold text-white">
+                            {member.initials || member.name.split(' ').map(n => n[0]).join('')}
+                          </span>
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-neon-magenta/10 
+              opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                      </div>
+                      <div className="flex-[1] p-2 sm:p-3 text-white flex flex-col justify-between gap-1">
+                        <div>
+                          <h3 className="text-xs sm:text-sm font-bold mb-1 group-hover:text-neon-cyan transition-colors duration-300 line-clamp-1">
+                            {member.name}
+                          </h3>
+                          <p className="text-neon-magenta text-[0.7rem] sm:text-xs font-medium mb-1 line-clamp-1">
+                            {member.position}
+                          </p>
+                          <p className="text-gray-300 text-xs leading-relaxed line-clamp-2 group-hover:text-gray-200 transition-colors duration-300">
+                            {member.bio}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+
+
+
+
+              {/* Navigation Dots */}
+              <div className="team-carousel__navigation">
+                <div className="team-carousel__navigation-list">
+                  {teamMembers.map((_, index) => (
+                    <div key={index} className="team-carousel__navigation-item">
+                      <a
+                        href={`#team__slide${index + 1}`}
+                        className="team-carousel__navigation-button"
+                      >
+                        Go to slide {index + 1}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
           </div>
         )}
 
@@ -295,15 +318,15 @@ const TeamSection = () => {
           className="text-center mt-16"
         >
           <div className="card bg-gradient-to-r from-neon-cyan/10 to-neon-magenta/10 border-2 border-transparent bg-clip-padding"
-               style={{
-                 background: 'linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1))',
-                 borderImage: 'linear-gradient(135deg, rgb(0, 255, 255), rgb(255, 0, 255)) 1'
-               }}>
+            style={{
+              background: 'linear-gradient(135deg, rgba(0, 255, 255, 0.1), rgba(255, 0, 255, 0.1))',
+              borderImage: 'linear-gradient(135deg, rgb(0, 255, 255), rgb(255, 0, 255)) 1'
+            }}>
             <h3 className="text-2xl font-bold text-white mb-4">
               Want to Join Our Team?
             </h3>
             <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-              We're always looking for passionate individuals who want to make a difference in technology. 
+              We're always looking for passionate individuals who want to make a difference in technology.
               Join us and be part of something amazing!
             </p>
             <a
@@ -340,6 +363,7 @@ const TeamSection = () => {
         .team-track::-webkit-scrollbar-thumb:hover {
           background: linear-gradient(90deg, #dd00dd, #00dddd);
         }
+        
         .line-clamp-1 {
           display: -webkit-box;
           -webkit-line-clamp: 1;
@@ -352,27 +376,137 @@ const TeamSection = () => {
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
-        .line-clamp-3 {
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
         
-        /* Mobile-specific styles for better touch scrolling */
-        @media (max-width: 768px) {
-          .team-track {
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-          }
-          .team-track::-webkit-scrollbar {
-            display: none;
-          }
-          
-          .team-member-card {
-            scroll-snap-align: start;
-          }
+        /* CSS-only carousel styles for mobile */
+        .team-carousel {
+          position: relative;
+          padding-top: 75%;
+          filter: drop-shadow(0 0 10px rgba(0, 255, 255, 0.3));
+          perspective: 100px;
+        }
+
+        .team-carousel__viewport {
+          position: absolute;
+          top: 0;
+          right: 0;
+          bottom: 0;
+          left: 0;
+          display: flex;
+          overflow-x: scroll;
+          counter-reset: item;
+          scroll-behavior: smooth;
+          scroll-snap-type: x mandatory;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+
+        .team-carousel__viewport::-webkit-scrollbar {
+          display: none;
+        }
+
+        .team-carousel__slide {
+          position: relative;
+          flex: 0 0 100%;
+          width: 100%;
+          counter-increment: item;
+          scroll-snap-align: center;
+          padding: 0 1rem;
+        }
+
+        .team-carousel__snapper {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          scroll-snap-align: center;
+        }
+
+        .team-carousel__navigation {
+          position: absolute;
+          right: 0;
+          bottom: -3rem;
+          left: 0;
+          text-align: center;
+        }
+
+        .team-carousel__navigation-list {
+          display: inline-flex;
+          gap: 0.5rem;
+          padding: 0;
+          margin: 0;
+          list-style: none;
+        }
+
+        .team-carousel__navigation-item {
+          display: inline-block;
+        }
+
+        .team-carousel__navigation-button {
+          display: inline-block;
+          width: 0.75rem;
+          height: 0.75rem;
+          background-color: rgba(255, 255, 255, 0.3);
+          background-clip: content-box;
+          border: 0.125rem solid transparent;
+          border-radius: 50%;
+          font-size: 0;
+          transition: all 0.2s;
+          text-decoration: none;
+        }
+
+        .team-carousel__navigation-button:hover,
+        .team-carousel__navigation-button:focus {
+          background-color: #ff00ff;
+          transform: scale(1.2);
+        }
+
+        .team-carousel__prev,
+        .team-carousel__next {
+          position: absolute;
+          top: 50%;
+          width: 3rem;
+          height: 3rem;
+          transform: translateY(-50%);
+          border-radius: 50%;
+          font-size: 0;
+          outline: 0;
+          background-color: rgba(0, 0, 0, 0.7);
+          background-size: 1rem 1rem;
+          background-repeat: no-repeat;
+          background-position: center center;
+          color: #fff;
+          border: 2px solid #ff00ff;
+          text-decoration: none;
+          transition: all 0.2s;
+          z-index: 10;
+        }
+
+        .team-carousel__prev {
+          left: 0.5rem;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='0,50 80,100 80,0' fill='%23fff'/%3E%3C/svg%3E");
+        }
+
+        .team-carousel__next {
+          right: 0.5rem;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpolygon points='100,50 20,100 20,0' fill='%23fff'/%3E%3C/svg%3E");
+        }
+
+        .team-carousel__prev:hover,
+        .team-carousel__next:hover {
+          background-color: rgba(255, 0, 255, 0.2);
+          border-color: #00ffff;
+          transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Target specific slides for active navigation indicator */
+        #team__slide1:target ~ .team-carousel__navigation .team-carousel__navigation-item:nth-child(1) .team-carousel__navigation-button,
+        #team__slide2:target ~ .team-carousel__navigation .team-carousel__navigation-item:nth-child(2) .team-carousel__navigation-button,
+        #team__slide3:target ~ .team-carousel__navigation .team-carousel__navigation-item:nth-child(3) .team-carousel__navigation-button,
+        #team__slide4:target ~ .team-carousel__navigation .team-carousel__navigation-item:nth-child(4) .team-carousel__navigation-button,
+        #team__slide5:target ~ .team-carousel__navigation .team-carousel__navigation-item:nth-child(5) .team-carousel__navigation-button {
+          background-color: #ff00ff;
+          transform: scale(1.2);
         }
       `}</style>
     </section>

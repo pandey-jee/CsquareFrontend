@@ -55,6 +55,7 @@ function App() {
               <Route path="/team" element={<Team />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="*" element={<Home />} />
             </Routes>
           </main>
           

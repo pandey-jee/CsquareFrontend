@@ -122,8 +122,27 @@ const MobileMenu = ({ isOpen, onClose, navItems }) => {
                     transition={{ delay: index * 0.1 }}
                   >
                     <a
-                      href={item.path}
-                      onClick={handleLinkClick}
+                      href={item.path === '/' ? '#' : 
+                            item.path === '/events' ? '#events' : 
+                            item.path === '/team' ? '#team' : 
+                            item.path === '/contact' ? '#contact' : 
+                            item.path}
+                      onClick={(e) => {
+                        if (item.path === '/') {
+                          e.preventDefault();
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else if (item.path === '/events') {
+                          e.preventDefault();
+                          document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
+                        } else if (item.path === '/team') {
+                          e.preventDefault();
+                          document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' });
+                        } else if (item.path === '/contact') {
+                          e.preventDefault();
+                          document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                        }
+                        handleLinkClick();
+                      }}
                       className={`block px-4 py-3 rounded-lg text-lg font-medium transition-all duration-300 ${
                         item.isAdmin
                           ? 'bg-gradient-to-r from-neon-magenta/20 to-neon-cyan/20 border border-neon-magenta text-neon-magenta hover:bg-gradient-to-r hover:from-neon-magenta hover:to-neon-cyan hover:text-black'

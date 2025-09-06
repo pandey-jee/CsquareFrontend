@@ -197,13 +197,14 @@ const EventsSectionHorizontal = () => {
             {/* Events Slider Track */}
             <div
               ref={trackRef}
-              className="events-track flex gap-4 md:gap-6 overflow-x-auto overflow-y-hidden cursor-grab select-none py-4 scroll-smooth"
+              className="events-track flex gap-4 md:gap-6 overflow-x-auto overflow-y-hidden cursor-grab select-none py-4"
               style={{
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-                WebkitScrollbar: { display: 'none' },
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#00ffff transparent',
+                scrollBehavior: 'smooth',
                 scrollSnapType: 'x mandatory',
-                WebkitOverflowScrolling: 'touch'
+                WebkitOverflowScrolling: 'touch',
+                paddingBottom: '20px'
               }}
               onMouseDown={handleMouseDown}
               onMouseUp={handleMouseUp}
@@ -228,11 +229,10 @@ const EventsSectionHorizontal = () => {
                   }}
                   draggable={false}
                 >
-                  {/* Event Card */}
-                  <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group">
+                  <div className="w-full h-full bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col">
                     
-                    {/* Event Image */}
-                    <div className="relative h-32 sm:h-40 md:h-48 overflow-hidden">
+                    {/* Event Image - 3/4 of the card height */}
+                    <div className="relative flex-[3] overflow-hidden">
                       {event.image ? (
                         <img 
                           src={event.image} 
@@ -264,8 +264,8 @@ const EventsSectionHorizontal = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
                     </div>
 
-                    {/* Event Content */}
-                    <div className="p-3 sm:p-4 md:p-6 flex flex-col" style={{ height: 'calc(100% - 8rem)' }}>
+                    {/* Event Content - 1/4 of the card height */}
+                    <div className="flex-[1] p-3 sm:p-4 md:p-6 flex flex-col justify-between">
                       {/* Date, Time and Location */}
                       <div className="text-xs sm:text-sm text-gray-600 mb-2 flex justify-between">
                         <span className="font-medium">
@@ -277,7 +277,7 @@ const EventsSectionHorizontal = () => {
                           {event.time && ` • ${event.time}`}
                         </span>
                         {event.location && (
-                          <span className="text-right text-gray-500">{event.location}</span>
+                          <span className="text-right text-gray-500 truncate ml-2">{event.location}</span>
                         )}
                       </div>
                       
@@ -287,20 +287,19 @@ const EventsSectionHorizontal = () => {
                       </h3>
                       
                       {/* Description */}
-                      <p className="text-gray-700 text-xs sm:text-sm mb-3 line-clamp-3 flex-grow">
+                      <p className="text-gray-700 text-xs sm:text-sm mb-3 line-clamp-2 flex-grow">
                         {event.description}
                       </p>
                       
                       {/* Tags */}
                       {event.tags && event.tags.length > 0 && (
                         <div className="mb-3 flex flex-wrap gap-1 sm:gap-2">
-                          {event.tags.slice(0, 3).map((tag, tagIndex) => (
+                          {event.tags.slice(0, 2).map((tag, tagIndex) => (
                             <span 
                               key={tagIndex}
                               className="text-[10px] sm:text-xs px-2 sm:px-3 py-1 rounded-full text-white font-medium"
                               style={{ 
-                                background: tagIndex === 0 ? '#0033ff' : 
-                                           tagIndex === 1 ? '#29bf12' : '#ff6b35'
+                                background: tagIndex === 0 ? '#0033ff' : '#29bf12'
                               }}
                             >
                               {tag}
@@ -361,11 +360,21 @@ const EventsSectionHorizontal = () => {
 
       <style jsx>{`
         .events-track {
-          scrollbar-width: none;
-          -ms-overflow-style: none;
+          scrollbar-width: thin;
+          scrollbar-color: #00ffff transparent;
         }
         .events-track::-webkit-scrollbar {
-          display: none;
+          height: 8px;
+        }
+        .events-track::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .events-track::-webkit-scrollbar-thumb {
+          background: linear-gradient(90deg, #00ffff, #ff00ff);
+          border-radius: 4px;
+        }
+        .events-track::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(90deg, #00dddd, #dd00dd);
         }
         .line-clamp-2 {
           display: -webkit-box;
@@ -385,6 +394,10 @@ const EventsSectionHorizontal = () => {
           .events-track {
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+          }
+          .events-track::-webkit-scrollbar {
+            display: none;
           }
           
           .event-card {

@@ -159,13 +159,14 @@ const TeamSection = () => {
             {/* Team Slider Track */}
             <div
               ref={trackRef}
-              className="team-track flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden cursor-grab select-none py-4 scroll-smooth"
+              className="team-track flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto overflow-y-hidden cursor-grab select-none py-4"
               style={{
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none',
-                WebkitScrollbar: { display: 'none' },
+                scrollbarWidth: 'thin',
+                scrollbarColor: '#ff00ff transparent',
+                scrollBehavior: 'smooth',
                 scrollSnapType: 'x mandatory',
-                WebkitOverflowScrolling: 'touch'
+                WebkitOverflowScrolling: 'touch',
+                paddingBottom: '20px'
               }}
               onMouseDown={handleMouseDown}
               onMouseUp={handleMouseUp}
@@ -191,10 +192,10 @@ const TeamSection = () => {
                   draggable={false}
                 >
                   {/* Card Background */}
-                  <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border-2 border-gray-700 hover:border-neon-cyan transition-all duration-300 group">
+                  <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border-2 border-gray-700 hover:border-neon-cyan transition-all duration-300 group flex flex-col">
                     
-                    {/* Member Photo Section */}
-                    <div className="relative h-40 sm:h-48 md:h-56 lg:h-64 overflow-hidden">
+                    {/* Member Photo Section - 3/4 of the card height */}
+                    <div className="relative flex-[3] overflow-hidden">
                       {member.photo ? (
                         <img
                           src={member.photo}
@@ -220,21 +221,23 @@ const TeamSection = () => {
                       <div className="absolute inset-0 bg-gradient-to-br from-neon-cyan/10 to-neon-magenta/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
 
-                    {/* Member Info Section */}
-                    <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6 text-white">
-                      <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1 sm:mb-2 group-hover:text-neon-cyan transition-colors duration-300">
-                        {member.name}
-                      </h3>
-                      <p className="text-neon-magenta text-xs sm:text-sm md:text-base font-medium mb-2">
-                        {member.position}
-                      </p>
-                      <p className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed line-clamp-3 group-hover:text-gray-200 transition-colors duration-300">
-                        {member.bio}
-                      </p>
+                    {/* Member Info Section - 1/4 of the card height */}
+                    <div className="flex-[1] p-3 sm:p-4 md:p-6 text-white flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-base sm:text-lg md:text-xl font-bold mb-1 sm:mb-2 group-hover:text-neon-cyan transition-colors duration-300 line-clamp-1">
+                          {member.name}
+                        </h3>
+                        <p className="text-neon-magenta text-xs sm:text-sm md:text-base font-medium mb-2 line-clamp-1">
+                          {member.position}
+                        </p>
+                        <p className="text-gray-300 text-xs sm:text-sm leading-relaxed line-clamp-2 group-hover:text-gray-200 transition-colors duration-300">
+                          {member.bio}
+                        </p>
+                      </div>
                       
                       {/* Social Links */}
                       {(member.email || member.linkedin || member.github) && (
-                        <div className="flex justify-start space-x-3 sm:space-x-4 mt-2 sm:mt-4">
+                        <div className="flex justify-start space-x-3 sm:space-x-4 mt-2">
                           {member.email && (
                             <a
                               href={`mailto:${member.email}`}
@@ -321,11 +324,33 @@ const TeamSection = () => {
 
       <style jsx>{`
         .team-track {
-          scrollbar-width: none;
-          -ms-overflow-style: none;
+          scrollbar-width: thin;
+          scrollbar-color: #ff00ff transparent;
         }
         .team-track::-webkit-scrollbar {
-          display: none;
+          height: 8px;
+        }
+        .team-track::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .team-track::-webkit-scrollbar-thumb {
+          background: linear-gradient(90deg, #ff00ff, #00ffff);
+          border-radius: 4px;
+        }
+        .team-track::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(90deg, #dd00dd, #00dddd);
+        }
+        .line-clamp-1 {
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        .line-clamp-2 {
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
         }
         .line-clamp-3 {
           display: -webkit-box;
@@ -339,6 +364,10 @@ const TeamSection = () => {
           .team-track {
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+          }
+          .team-track::-webkit-scrollbar {
+            display: none;
           }
           
           .team-member-card {

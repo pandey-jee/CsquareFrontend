@@ -61,18 +61,36 @@ const Admin = () => {
   const verifyToken = async (token) => {
     setIsVerifying(true);
     try {
+      console.log('Verifying token...');
       const response = await api.post('/auth/verify', {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      if (response.data.valid) {
+      
+      if (response.data && (response.data.valid || response.data.success)) {
+        console.log('Token verification successful');
         setIsAuthenticated(true);
         // Data will be fetched by the useEffect that monitors isAuthenticated
       } else {
+        console.log('Token verification failed - invalid response');
         localStorage.removeItem('adminToken');
         setIsAuthenticated(false);
+        setStatus({ type: 'error', message: 'Session expired. Please login again.' });
       }
     } catch (error) {
       console.error('Token verification failed:', error);
+      
+      // Handle specific error cases
+      if (error.response?.status === 404) {
+        console.error('Auth endpoint not found - check backend server');
+        setStatus({ type: 'error', message: 'Authentication service unavailable. Please check if the backend server is running.' });
+      } else if (error.response?.status === 401) {
+        console.log('Token expired or invalid');
+        setStatus({ type: 'error', message: 'Session expired. Please login again.' });
+      } else {
+        console.log('Network or server error during verification');
+        setStatus({ type: 'error', message: 'Unable to verify session. Please check your connection and try again.' });
+      }
+      
       localStorage.removeItem('adminToken');
       setIsAuthenticated(false);
     } finally {
@@ -133,11 +151,15 @@ const Admin = () => {
         return;
       }
 
+      console.log('Fetching admin data...');
+      
       const [eventsRes, teamRes, galleryRes] = await Promise.all([
         api.get('/events'),
         api.get('/team'),
         api.get('/gallery')
       ]);
+      
+      console.log('Data fetched successfully');
       setEvents(eventsRes.data.data || []);
       setTeamMembers(teamRes.data.data || []);
       setGalleryItems(galleryRes.data.data || []);
@@ -145,10 +167,13 @@ const Admin = () => {
       console.error('Failed to fetch data:', error);
       
       // If any request fails with 401, logout the user
-      if (error.status === 401) {
+      if (error.response?.status === 401 || error.status === 401) {
+        console.log('Authentication failed, logging out');
         localStorage.removeItem('adminToken');
         setIsAuthenticated(false);
         setStatus({ type: 'error', message: 'Session expired. Please login again.' });
+      } else {
+        setStatus({ type: 'error', message: 'Failed to load admin data. Please try again.' });
       }
     }
   };

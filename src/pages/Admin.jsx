@@ -5,7 +5,8 @@ import api from '../utils/api';
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [credentials, setCredentials] = useState({ username: '', password: '' });
-  const [activeTab, setActiveTab] = useState('events');
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeManagement, setActiveManagement] = useState(''); // 'events', 'team', 'gallery'
   const [events, setEvents] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [galleryItems, setGalleryItems] = useState([]);
@@ -150,7 +151,6 @@ const Admin = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('adminToken');
-      console.log('Sending event data:', newEvent);
       await api.post('/events', newEvent, {
         headers: { Authorization: `Bearer ${token}` }
       });
@@ -419,51 +419,17 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen pt-32">
-      <div className="container-custom">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-orbitron font-bold neon-text">
-            🛠️ Admin Panel
+    <div className="min-h-screen pt-20 sm:pt-24 md:pt-32">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 sm:mb-8 gap-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold neon-text text-center sm:text-left">
+            🛠️ Admin Control Panel
           </h1>
           <button
             onClick={handleLogout}
-            className="btn-secondary"
+            className="btn-secondary self-center sm:self-auto"
           >
             Logout
-          </button>
-        </div>
-
-        {/* Tabs */}
-        <div className="flex space-x-4 mb-8">
-          <button
-            onClick={() => setActiveTab('events')}
-            className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-              activeTab === 'events'
-                ? 'bg-gradient-to-r from-neon-cyan to-neon-magenta text-black'
-                : 'border-2 border-neon-cyan text-neon-cyan hover:bg-neon-cyan hover:text-black'
-            }`}
-          >
-            Manage Events
-          </button>
-          <button
-            onClick={() => setActiveTab('team')}
-            className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-              activeTab === 'team'
-                ? 'bg-gradient-to-r from-neon-cyan to-neon-magenta text-black'
-                : 'border-2 border-neon-cyan text-neon-cyan hover:bg-neon-cyan hover:text-black'
-            }`}
-          >
-            Manage Team
-          </button>
-          <button
-            onClick={() => setActiveTab('gallery')}
-            className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-              activeTab === 'gallery'
-                ? 'bg-gradient-to-r from-neon-cyan to-neon-magenta text-black'
-                : 'border-2 border-neon-cyan text-neon-cyan hover:bg-neon-cyan hover:text-black'
-            }`}
-          >
-            Manage Gallery
           </button>
         </div>
 
@@ -477,14 +443,142 @@ const Admin = () => {
           </div>
         )}
 
-        {/* Events Tab */}
-        {activeTab === 'events' && (
-          <div className="space-y-8">
-            <div className="card">
-              <h2 className="text-2xl font-orbitron font-bold text-white mb-6">
+        {/* Dashboard Overview */}
+        {activeManagement === '' && (
+          <div className="space-y-6 sm:space-y-8">
+            {/* Statistics Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+              {/* Events Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="card p-4 sm:p-6 text-center"
+              >
+                <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">📅</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-neon-cyan mb-2">
+                  {events.length}
+                </div>
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">
+                  Total Events
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-300 mb-4 sm:mb-6">
+                  Manage your club events, workshops, and activities
+                </p>
+                <button
+                  onClick={() => setActiveManagement('events')}
+                  className="w-full btn-primary text-sm sm:text-base"
+                >
+                  Manage Events
+                </button>
+              </motion.div>
+
+              {/* Team Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="card p-4 sm:p-6 text-center"
+              >
+                <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">👥</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-neon-cyan mb-2">
+                  {teamMembers.length}
+                </div>
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">
+                  Team Members
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-300 mb-4 sm:mb-6">
+                  Add and manage your club team members
+                </p>
+                <button
+                  onClick={() => setActiveManagement('team')}
+                  className="w-full btn-primary text-sm sm:text-base"
+                >
+                  Manage Team
+                </button>
+              </motion.div>
+
+              {/* Gallery Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="card p-4 sm:p-6 text-center sm:col-span-2 lg:col-span-1"
+              >
+                <div className="text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">🖼️</div>
+                <div className="text-2xl sm:text-3xl md:text-4xl font-orbitron font-bold text-neon-cyan mb-2">
+                  {galleryItems.length}
+                </div>
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-white mb-3 sm:mb-4">
+                  Gallery Items
+                </h3>
+                <p className="text-xs sm:text-sm text-gray-300 mb-4 sm:mb-6">
+                  Manage your club's photo gallery and memories
+                </p>
+                <button
+                  onClick={() => setActiveManagement('gallery')}
+                  className="w-full btn-primary text-sm sm:text-base"
+                >
+                  Manage Gallery
+                </button>
+              </motion.div>
+            </div>
+
+            {/* Quick Stats */}
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-orbitron font-bold text-white mb-4 sm:mb-6">
+                📊 Quick Overview
+              </h2>
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                <div className="text-center p-3 sm:p-4 bg-black bg-opacity-30 rounded-lg border border-gray-600">
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-neon-cyan">
+                    {events.filter(e => e.type === 'upcoming').length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-300">Upcoming Events</div>
+                </div>
+                <div className="text-center p-3 sm:p-4 bg-black bg-opacity-30 rounded-lg border border-gray-600">
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-neon-magenta">
+                    {events.filter(e => e.type === 'past').length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-300">Past Events</div>
+                </div>
+                <div className="text-center p-3 sm:p-4 bg-black bg-opacity-30 rounded-lg border border-gray-600">
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-neon-yellow">
+                    {teamMembers.length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-300">Active Members</div>
+                </div>
+                <div className="text-center p-3 sm:p-4 bg-black bg-opacity-30 rounded-lg border border-gray-600">
+                  <div className="text-lg sm:text-xl md:text-2xl font-bold text-green-400">
+                    {galleryItems.length}
+                  </div>
+                  <div className="text-xs sm:text-sm text-gray-300">Photos</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Back Button for Management Sections */}
+        {activeManagement !== '' && (
+          <div className="mb-4 sm:mb-6">
+            <button
+              onClick={() => setActiveManagement('')}
+              className="btn-secondary text-sm sm:text-base"
+            >
+              ← Back to Dashboard
+            </button>
+          </div>
+        )}
+
+        {/* Events Management */}
+        {activeManagement === 'events' && (
+          <div className="space-y-6 sm:space-y-8">
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-orbitron font-bold text-white mb-4 sm:mb-6">
                 Add New Event
               </h2>
-              <form onSubmit={addEvent} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form onSubmit={addEvent} className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Type
@@ -492,7 +586,7 @@ const Admin = () => {
                   <select
                     value={newEvent.type}
                     onChange={(e) => setNewEvent({...newEvent, type: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                   >
                     <option value="upcoming">Upcoming</option>
                     <option value="past">Past</option>
@@ -507,7 +601,7 @@ const Admin = () => {
                     type="date"
                     value={newEvent.date}
                     onChange={(e) => setNewEvent({...newEvent, date: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                     required
                   />
                 </div>
@@ -520,11 +614,11 @@ const Admin = () => {
                     type="time"
                     value={newEvent.time}
                     onChange={(e) => setNewEvent({...newEvent, time: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                   />
                 </div>
                 
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Location
                   </label>
@@ -532,25 +626,12 @@ const Admin = () => {
                     type="text"
                     value={newEvent.location}
                     onChange={(e) => setNewEvent({...newEvent, location: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                     placeholder="e.g., Tech Hub, Online, Conference Room"
                   />
                 </div>
                 
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Event Image URL
-                  </label>
-                  <input
-                    type="url"
-                    value={newEvent.image}
-                    onChange={(e) => setNewEvent({...newEvent, image: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                    placeholder="https://example.com/event-image.jpg"
-                  />
-                </div>
-                
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Title
                   </label>
@@ -558,12 +639,12 @@ const Admin = () => {
                     type="text"
                     value={newEvent.title}
                     onChange={(e) => setNewEvent({...newEvent, title: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                     required
                   />
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Description
                   </label>
@@ -571,8 +652,21 @@ const Admin = () => {
                     value={newEvent.description}
                     onChange={(e) => setNewEvent({...newEvent, description: e.target.value})}
                     rows={3}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white resize-none"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white resize-none text-sm sm:text-base"
                     required
+                  />
+                </div>
+                
+                <div className="lg:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Event Image URL
+                  </label>
+                  <input
+                    type="url"
+                    value={newEvent.image}
+                    onChange={(e) => setNewEvent({...newEvent, image: e.target.value})}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                    placeholder="https://example.com/event-image.jpg"
                   />
                 </div>
                 
@@ -584,7 +678,7 @@ const Admin = () => {
                     type="url"
                     value={newEvent.link}
                     onChange={(e) => setNewEvent({...newEvent, link: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                   />
                 </div>
                 
@@ -597,11 +691,11 @@ const Admin = () => {
                     value={newEvent.linkText}
                     onChange={(e) => setNewEvent({...newEvent, linkText: e.target.value})}
                     placeholder="e.g., Register Now"
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                   />
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Tags (comma-separated)
                   </label>
@@ -613,15 +707,15 @@ const Admin = () => {
                       tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
                     })}
                     placeholder="e.g., Tech, Open, Workshop"
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                   />
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <button
                     type="submit"
                     disabled={loading}
-                    className={`btn-primary ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`btn-primary w-full sm:w-auto text-sm sm:text-base ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {loading ? 'Adding...' : 'Add Event'}
                   </button>
@@ -630,17 +724,17 @@ const Admin = () => {
             </div>
 
             {/* Events List */}
-            <div className="card">
-              <h2 className="text-2xl font-orbitron font-bold text-white mb-6">
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-orbitron font-bold text-white mb-4 sm:mb-6">
                 Current Events ({events.length})
               </h2>
               <div className="space-y-4">
                 {events.map(event => (
-                  <div key={event.id} className="border border-gray-600 rounded-lg p-4 flex justify-between items-start">
+                  <div key={event.id} className="border border-gray-600 rounded-lg p-3 sm:p-4 flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
                     <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <h3 className="text-lg font-bold text-white">{event.title}</h3>
-                        <span className={`px-2 py-1 rounded text-xs ${
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-3 mb-2 gap-2">
+                        <h3 className="text-base sm:text-lg font-bold text-white">{event.title}</h3>
+                        <span className={`px-2 py-1 rounded text-xs w-fit ${
                           event.type === 'upcoming' 
                             ? 'bg-green-500 bg-opacity-20 text-green-400'
                             : 'bg-gray-500 bg-opacity-20 text-gray-400'
@@ -666,16 +760,16 @@ const Admin = () => {
                         </a>
                       )}
                     </div>
-                    <div className="flex flex-col gap-2 ml-4">
+                    <div className="flex flex-row lg:flex-col gap-2">
                       <button
                         onClick={() => startEditEvent(event)}
-                        className="px-3 py-1 bg-blue-500 bg-opacity-20 border border-blue-500 text-blue-400 rounded hover:bg-blue-500 hover:text-white transition-colors duration-300"
+                        className="flex-1 lg:flex-none px-3 py-1 bg-blue-500 bg-opacity-20 border border-blue-500 text-blue-400 rounded hover:bg-blue-500 hover:text-white transition-colors duration-300 text-sm"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => deleteEvent(event.id)}
-                        className="px-3 py-1 bg-red-500 bg-opacity-20 border border-red-500 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors duration-300"
+                        className="flex-1 lg:flex-none px-3 py-1 bg-red-500 bg-opacity-20 border border-red-500 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors duration-300 text-sm"
                       >
                         Delete
                       </button>
@@ -684,142 +778,17 @@ const Admin = () => {
                 ))}
               </div>
             </div>
-
-            {/* Edit Event Modal */}
-            {editingEvent && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                <div className="bg-gray-900 rounded-lg p-6 w-full max-w-4xl max-h-screen overflow-y-auto">
-                  <h2 className="text-2xl font-orbitron font-bold text-white mb-6">Edit Event</h2>
-                  <form onSubmit={updateEvent} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Type</label>
-                      <select
-                        value={editingEvent.type}
-                        onChange={(e) => setEditingEvent({...editingEvent, type: e.target.value})}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                      >
-                        <option value="upcoming">Upcoming</option>
-                        <option value="past">Past</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Date</label>
-                      <input
-                        type="date"
-                        value={editingEvent.date}
-                        onChange={(e) => setEditingEvent({...editingEvent, date: e.target.value})}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Time</label>
-                      <input
-                        type="time"
-                        value={editingEvent.time || ''}
-                        onChange={(e) => setEditingEvent({...editingEvent, time: e.target.value})}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Location</label>
-                      <input
-                        type="text"
-                        value={editingEvent.location || ''}
-                        onChange={(e) => setEditingEvent({...editingEvent, location: e.target.value})}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Title</label>
-                      <input
-                        type="text"
-                        value={editingEvent.title}
-                        onChange={(e) => setEditingEvent({...editingEvent, title: e.target.value})}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                        required
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
-                      <textarea
-                        value={editingEvent.description}
-                        onChange={(e) => setEditingEvent({...editingEvent, description: e.target.value})}
-                        rows={3}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white resize-none"
-                        required
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Image URL</label>
-                      <input
-                        type="url"
-                        value={editingEvent.image || ''}
-                        onChange={(e) => setEditingEvent({...editingEvent, image: e.target.value})}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Link</label>
-                      <input
-                        type="url"
-                        value={editingEvent.link || ''}
-                        onChange={(e) => setEditingEvent({...editingEvent, link: e.target.value})}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Link Text</label>
-                      <input
-                        type="text"
-                        value={editingEvent.linkText || ''}
-                        onChange={(e) => setEditingEvent({...editingEvent, linkText: e.target.value})}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                      />
-                    </div>
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-300 mb-2">Tags</label>
-                      <input
-                        type="text"
-                        value={Array.isArray(editingEvent.tags) ? editingEvent.tags.join(', ') : ''}
-                        onChange={(e) => setEditingEvent({
-                          ...editingEvent,
-                          tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
-                        })}
-                        className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
-                      />
-                    </div>
-                    <div className="md:col-span-2 flex gap-4">
-                      <button
-                        type="submit"
-                        disabled={loading}
-                        className="btn-primary flex-1"
-                      >
-                        {loading ? 'Updating...' : 'Update Event'}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setEditingEvent(null)}
-                        className="btn-secondary flex-1"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            )}
           </div>
         )}
 
-        {/* Team Tab */}
-        {activeTab === 'team' && (
-          <div className="space-y-8">
-            <div className="card">
-              <h2 className="text-2xl font-orbitron font-bold text-white mb-6">
+        {/* Team Management */}
+        {activeManagement === 'team' && (
+          <div className="space-y-6 sm:space-y-8">
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-orbitron font-bold text-white mb-4 sm:mb-6">
                 Add New Team Member
               </h2>
-              <form onSubmit={addTeamMember} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <form onSubmit={addTeamMember} className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Name
@@ -828,7 +797,7 @@ const Admin = () => {
                     type="text"
                     value={newMember.name}
                     onChange={(e) => setNewMember({...newMember, name: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                     required
                   />
                 </div>
@@ -841,7 +810,7 @@ const Admin = () => {
                     type="text"
                     value={newMember.position}
                     onChange={(e) => setNewMember({...newMember, position: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                     required
                   />
                 </div>
@@ -855,7 +824,7 @@ const Admin = () => {
                     value={newMember.initials}
                     onChange={(e) => setNewMember({...newMember, initials: e.target.value.toUpperCase()})}
                     maxLength={3}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                     required
                   />
                 </div>
@@ -868,11 +837,11 @@ const Admin = () => {
                     type="url"
                     value={newMember.photo}
                     onChange={(e) => setNewMember({...newMember, photo: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                   />
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Bio
                   </label>
@@ -880,16 +849,16 @@ const Admin = () => {
                     value={newMember.bio}
                     onChange={(e) => setNewMember({...newMember, bio: e.target.value})}
                     rows={3}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white resize-none"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white resize-none text-sm sm:text-base"
                     required
                   />
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <button
                     type="submit"
                     disabled={loading}
-                    className={`btn-primary ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`btn-primary w-full sm:w-auto text-sm sm:text-base ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {loading ? 'Adding...' : 'Add Team Member'}
                   </button>
@@ -898,11 +867,11 @@ const Admin = () => {
             </div>
 
             {/* Team Members List */}
-            <div className="card">
-              <h2 className="text-2xl font-orbitron font-bold text-white mb-6">
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-orbitron font-bold text-white mb-4 sm:mb-6">
                 Current Team Members ({teamMembers.length})
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {teamMembers.map(member => (
                   <div key={member.id} className="border border-gray-600 rounded-lg p-4">
                     <div className="flex items-center space-x-3 mb-3">
@@ -923,14 +892,14 @@ const Admin = () => {
                         </span>
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-bold text-white">{member.name}</h3>
-                        <p className="text-sm text-neon-magenta">{member.position}</p>
+                        <h3 className="font-bold text-white text-sm sm:text-base">{member.name}</h3>
+                        <p className="text-xs sm:text-sm text-neon-magenta">{member.position}</p>
                       </div>
                     </div>
-                    <p className="text-gray-300 text-sm mb-3">{member.bio}</p>
+                    <p className="text-gray-300 text-xs sm:text-sm mb-3">{member.bio}</p>
                     <button
                       onClick={() => deleteTeamMember(member.id)}
-                      className="w-full px-3 py-1 bg-red-500 bg-opacity-20 border border-red-500 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors duration-300"
+                      className="w-full px-3 py-1 bg-red-500 bg-opacity-20 border border-red-500 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors duration-300 text-sm"
                     >
                       Remove
                     </button>
@@ -941,16 +910,15 @@ const Admin = () => {
           </div>
         )}
 
-        {/* Gallery Tab */}
-        {activeTab === 'gallery' && (
-          <div className="space-y-6">
-            {/* Add Gallery Item Form */}
-            <div className="card">
-              <h2 className="text-2xl font-orbitron font-bold text-white mb-6">
+        {/* Gallery Management */}
+        {activeManagement === 'gallery' && (
+          <div className="space-y-6 sm:space-y-8">
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-orbitron font-bold text-white mb-4 sm:mb-6">
                 Add Gallery Item
               </h2>
-              <form onSubmit={addGalleryItem} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="md:col-span-2">
+              <form onSubmit={addGalleryItem} className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                <div className="lg:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Title
                   </label>
@@ -958,12 +926,12 @@ const Admin = () => {
                     type="text"
                     value={newGalleryItem.title}
                     onChange={(e) => setNewGalleryItem({...newGalleryItem, title: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                     required
                   />
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Description (Optional)
                   </label>
@@ -971,11 +939,11 @@ const Admin = () => {
                     value={newGalleryItem.description}
                     onChange={(e) => setNewGalleryItem({...newGalleryItem, description: e.target.value})}
                     rows={2}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white resize-none"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white resize-none text-sm sm:text-base"
                   />
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Image URL
                   </label>
@@ -983,19 +951,19 @@ const Admin = () => {
                     type="url"
                     value={newGalleryItem.imageUrl}
                     onChange={(e) => setNewGalleryItem({...newGalleryItem, imageUrl: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                     required
                   />
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Related Event (Optional)
                   </label>
                   <select
                     value={newGalleryItem.eventId}
                     onChange={(e) => setNewGalleryItem({...newGalleryItem, eventId: e.target.value})}
-                    className="w-full px-4 py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white"
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
                   >
                     <option value="">Select an event (optional)</option>
                     {events.map(event => (
@@ -1006,11 +974,11 @@ const Admin = () => {
                   </select>
                 </div>
                 
-                <div className="md:col-span-2">
+                <div className="lg:col-span-2">
                   <button
                     type="submit"
                     disabled={loading}
-                    className={`btn-primary ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`btn-primary w-full sm:w-auto text-sm sm:text-base ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {loading ? 'Adding...' : 'Add Gallery Item'}
                   </button>
@@ -1019,11 +987,11 @@ const Admin = () => {
             </div>
 
             {/* Gallery Items List */}
-            <div className="card">
-              <h2 className="text-2xl font-orbitron font-bold text-white mb-6">
+            <div className="card p-4 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-orbitron font-bold text-white mb-4 sm:mb-6">
                 Current Gallery Items ({galleryItems.length})
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {galleryItems.map(item => (
                   <div key={item.id} className="border border-gray-600 rounded-lg overflow-hidden">
                     <img
@@ -1035,13 +1003,13 @@ const Admin = () => {
                       }}
                     />
                     <div className="p-4">
-                      <h3 className="font-bold text-white mb-2">{item.title}</h3>
+                      <h3 className="font-bold text-white mb-2 text-sm sm:text-base">{item.title}</h3>
                       {item.description && (
-                        <p className="text-gray-300 text-sm mb-2">{item.description}</p>
+                        <p className="text-gray-300 text-xs sm:text-sm mb-2">{item.description}</p>
                       )}
                       <button
                         onClick={() => deleteGalleryItem(item.id)}
-                        className="w-full px-3 py-2 bg-red-500 bg-opacity-20 border border-red-500 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors duration-300"
+                        className="w-full px-3 py-2 bg-red-500 bg-opacity-20 border border-red-500 text-red-400 rounded hover:bg-red-500 hover:text-white transition-colors duration-300 text-sm"
                       >
                         Delete
                       </button>
@@ -1049,6 +1017,130 @@ const Admin = () => {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        )}
+        {/* Edit Event Modal */}
+        {editingEvent && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-gray-900 rounded-lg p-4 sm:p-6 w-full max-w-4xl max-h-screen overflow-y-auto">
+              <h2 className="text-xl sm:text-2xl font-orbitron font-bold text-white mb-4 sm:mb-6">Edit Event</h2>
+              <form onSubmit={updateEvent} className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Type</label>
+                  <select
+                    value={editingEvent.type}
+                    onChange={(e) => setEditingEvent({...editingEvent, type: e.target.value})}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                  >
+                    <option value="upcoming">Upcoming</option>
+                    <option value="past">Past</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Date</label>
+                  <input
+                    type="date"
+                    value={editingEvent.date}
+                    onChange={(e) => setEditingEvent({...editingEvent, date: e.target.value})}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Time</label>
+                  <input
+                    type="time"
+                    value={editingEvent.time || ''}
+                    onChange={(e) => setEditingEvent({...editingEvent, time: e.target.value})}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Location</label>
+                  <input
+                    type="text"
+                    value={editingEvent.location || ''}
+                    onChange={(e) => setEditingEvent({...editingEvent, location: e.target.value})}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                  />
+                </div>
+                <div className="lg:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Title</label>
+                  <input
+                    type="text"
+                    value={editingEvent.title}
+                    onChange={(e) => setEditingEvent({...editingEvent, title: e.target.value})}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                    required
+                  />
+                </div>
+                <div className="lg:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                  <textarea
+                    value={editingEvent.description}
+                    onChange={(e) => setEditingEvent({...editingEvent, description: e.target.value})}
+                    rows={3}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white resize-none text-sm sm:text-base"
+                    required
+                  />
+                </div>
+                <div className="lg:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Image URL</label>
+                  <input
+                    type="url"
+                    value={editingEvent.image || ''}
+                    onChange={(e) => setEditingEvent({...editingEvent, image: e.target.value})}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Link</label>
+                  <input
+                    type="url"
+                    value={editingEvent.link || ''}
+                    onChange={(e) => setEditingEvent({...editingEvent, link: e.target.value})}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Link Text</label>
+                  <input
+                    type="text"
+                    value={editingEvent.linkText || ''}
+                    onChange={(e) => setEditingEvent({...editingEvent, linkText: e.target.value})}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                  />
+                </div>
+                <div className="lg:col-span-2">
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Tags</label>
+                  <input
+                    type="text"
+                    value={Array.isArray(editingEvent.tags) ? editingEvent.tags.join(', ') : ''}
+                    onChange={(e) => setEditingEvent({
+                      ...editingEvent,
+                      tags: e.target.value.split(',').map(tag => tag.trim()).filter(tag => tag)
+                    })}
+                    className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-black bg-opacity-50 border-2 border-gray-600 rounded-lg focus:border-neon-cyan focus:outline-none text-white text-sm sm:text-base"
+                  />
+                </div>
+                <div className="lg:col-span-2 flex flex-col sm:flex-row gap-4">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="btn-primary flex-1 text-sm sm:text-base"
+                  >
+                    {loading ? 'Updating...' : 'Update Event'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setEditingEvent(null)}
+                    className="btn-secondary flex-1 text-sm sm:text-base"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}

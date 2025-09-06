@@ -4,13 +4,12 @@ import api from '../utils/api';
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(true); // Add verification state
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [activeManagement, setActiveManagement] = useState('');
   const [events, setEvents] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
   const [galleryItems, setGalleryItems] = useState([]);
-  const [loginAttempts, setLoginAttempts] = useState(0);
-  const [isLocked, setIsLocked] = useState(false);
   const [newEvent, setNewEvent] = useState({
     type: 'upcoming',
     date: '',
@@ -40,35 +39,49 @@ const Admin = () => {
   const [status, setStatus] = useState({ type: '', message: '' });
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-      verifyToken(token);
-    }
+    const checkAuthentication = async () => {
+      const token = localStorage.getItem('adminToken');
+      if (token) {
+        await verifyToken(token);
+      } else {
+        setIsVerifying(false); // No token, stop verifying
+      }
+    };
+    
+    checkAuthentication();
   }, []);
 
+  // Separate effect to fetch data when authentication state changes
+  useEffect(() => {
+    if (isAuthenticated && !isVerifying) {
+      fetchData();
+    }
+  }, [isAuthenticated, isVerifying]);
+
   const verifyToken = async (token) => {
+    setIsVerifying(true);
     try {
       const response = await api.get('/auth/verify', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.valid) {
         setIsAuthenticated(true);
-        fetchData();
+        // Data will be fetched by the useEffect that monitors isAuthenticated
       } else {
         localStorage.removeItem('adminToken');
+        setIsAuthenticated(false);
       }
     } catch (error) {
+      console.error('Token verification failed:', error);
       localStorage.removeItem('adminToken');
+      setIsAuthenticated(false);
+    } finally {
+      setIsVerifying(false);
     }
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (isLocked) {
-      setStatus({ type: 'error', message: 'Account is temporarily locked. Please try again later.' });
-      return;
-    }
 
     if (!credentials.username || !credentials.password) {
       setStatus({ type: 'error', message: 'Please enter both username and password.' });
@@ -91,24 +104,9 @@ const Admin = () => {
       fetchData();
       setStatus({ type: 'success', message: 'Login successful!' });
       setCredentials({ username: '', password: '' });
-      setLoginAttempts(0);
-      setIsLocked(false);
     } catch (error) {
-      const newAttempts = loginAttempts + 1;
-      setLoginAttempts(newAttempts);
-
-      if (newAttempts >= 3) {
-        setIsLocked(true);
-        setTimeout(() => {
-          setIsLocked(false);
-          setLoginAttempts(0);
-        }, 5 * 60 * 1000);
-        setStatus({ type: 'error', message: 'Too many failed attempts. Account locked for 5 minutes.' });
-      } else {
-        const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
-        setStatus({ type: 'error', message: `${errorMessage} (${newAttempts}/3 attempts)` });
-      }
-
+      const errorMessage = error.response?.data?.error || 'Login failed. Please try again.';
+      setStatus({ type: 'error', message: errorMessage });
       setCredentials(prev => ({ ...prev, password: '' }));
     } finally {
       setLoading(false);
@@ -123,7 +121,18 @@ const Admin = () => {
   };
 
   const fetchData = async () => {
+    // Only fetch data if authenticated and not verifying
+    if (!isAuthenticated || isVerifying) {
+      return;
+    }
+
     try {
+      const token = localStorage.getItem('adminToken');
+      if (!token) {
+        setIsAuthenticated(false);
+        return;
+      }
+
       const [eventsRes, teamRes, galleryRes] = await Promise.all([
         api.get('/events'),
         api.get('/team'),
@@ -134,6 +143,13 @@ const Admin = () => {
       setGalleryItems(galleryRes.data.data || []);
     } catch (error) {
       console.error('Failed to fetch data:', error);
+      
+      // If any request fails with 401, logout the user
+      if (error.status === 401) {
+        localStorage.removeItem('adminToken');
+        setIsAuthenticated(false);
+        setStatus({ type: 'error', message: 'Session expired. Please login again.' });
+      }
     }
   };
 
@@ -302,7 +318,6 @@ const Admin = () => {
                 required
                 autoComplete="username"
                 maxLength={50}
-                disabled={isLocked}
               />
             </div>
 
@@ -318,15 +333,8 @@ const Admin = () => {
                 required
                 autoComplete="current-password"
                 maxLength={100}
-                disabled={isLocked}
               />
             </div>
-
-            {isLocked && (
-              <div className="p-4 rounded-lg bg-orange-500/20 border border-orange-500 text-orange-400">
-                ⚠️ Account temporarily locked due to multiple failed attempts. Please try again later.
-              </div>
-            )}
 
             {status.message && (
               <div className={`p-4 rounded-lg ${status.type === 'success'
@@ -339,14 +347,31 @@ const Admin = () => {
 
             <button
               type="submit"
-              disabled={loading || isLocked}
-              className={`w-full btn-primary py-3 ${loading || isLocked ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={loading}
+              className={`w-full btn-primary py-3 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
             >
               {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
         </motion.div>
       </div>
+    );
+  }
+
+  // Show loading while verifying token
+  if (isVerifying) {
+    return (
+      <main className="relative z-10">
+        <div className="min-h-screen pt-20 sm:pt-24 md:pt-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-black via-gray-900 to-black">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="card bg-black/60 backdrop-blur-sm border-gray-700 p-8">
+              <div className="animate-spin w-8 h-8 border-4 border-neon-cyan border-t-transparent rounded-full mx-auto mb-4"></div>
+              <h2 className="text-xl font-semibold text-white mb-2">Verifying Authentication</h2>
+              <p className="text-gray-400">Please wait while we verify your session...</p>
+            </div>
+          </div>
+        </div>
+      </main>
     );
   }
 

@@ -31,9 +31,17 @@ api.interceptors.response.use(
   (error) => {
     // Handle common error cases
     if (error.response?.status === 401) {
-      // Unauthorized - remove token and redirect to login
+      // Unauthorized - remove token
       localStorage.removeItem('adminToken');
-      // You could also trigger a redirect here if needed
+      
+      // Only redirect/reload if we're not already on a login attempt
+      const isLoginRequest = error.config?.url?.includes('/auth/login');
+      const isVerifyRequest = error.config?.url?.includes('/auth/verify');
+      
+      if (!isLoginRequest && !isVerifyRequest) {
+        // For other requests, we'll let the component handle the auth state change
+        console.warn('Authentication failed, token removed');
+      }
     }
     
     // Return a standardized error format

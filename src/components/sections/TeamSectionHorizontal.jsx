@@ -233,7 +233,7 @@ const TeamSection = () => {
             </div>
 
             {/* Mobile CSS-Only Carousel */}
-            <section className="team-carousel md:hidden w-full flex justify-center items-center h-[360px]" aria-label="Team Members">
+            <section className="team-carousel md:hidden w-[278px] md:w-full flex justify-center items-center h-[360px]" aria-label="Team Members">
               <div className="team-carousel__viewport overflow-x-scroll  scroll-snap-x mandatory flex gap-4 p-2 w-full item max-w-screen-sm items-center">
                 {teamMembers.map((member, index) => (
                   <div

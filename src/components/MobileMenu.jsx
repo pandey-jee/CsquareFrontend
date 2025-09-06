@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const MobileMenu = ({ isOpen, onClose, navItems }) => {
   useEffect(() => {
@@ -122,8 +123,8 @@ const MobileMenu = ({ isOpen, onClose, navItems }) => {
                     transition={{ delay: index * 0.1 }}
                   >
                     {item.isAdmin ? (
-                      <a
-                        href={item.path}
+                      <Link
+                        to={item.path}
                         onClick={handleLinkClick}
                         className="block px-4 py-3 rounded-lg text-lg font-medium transition-all duration-300 bg-gradient-to-r from-neon-magenta/20 to-neon-cyan/20 border border-neon-magenta text-neon-magenta hover:bg-gradient-to-r hover:from-neon-magenta hover:to-neon-cyan hover:text-black"
                       >
@@ -131,10 +132,10 @@ const MobileMenu = ({ isOpen, onClose, navItems }) => {
                           {item.icon && <span>{item.icon}</span>}
                           {item.label}
                         </span>
-                      </a>
+                      </Link>
                     ) : item.path === '/contact' ? (
-                      <a
-                        href={item.path}
+                      <Link
+                        to={item.path}
                         onClick={handleLinkClick}
                         className="block px-4 py-3 rounded-lg text-lg font-medium transition-all duration-300 text-white hover:bg-white hover:bg-opacity-10 hover:text-neon-cyan"
                       >
@@ -142,7 +143,7 @@ const MobileMenu = ({ isOpen, onClose, navItems }) => {
                           {item.icon && <span>{item.icon}</span>}
                           {item.label}
                         </span>
-                      </a>
+                      </Link>
                     ) : (
                       <a
                         href={item.path === '/' ? '#' : 

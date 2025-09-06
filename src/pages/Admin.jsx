@@ -61,7 +61,7 @@ const Admin = () => {
   const verifyToken = async (token) => {
     setIsVerifying(true);
     try {
-      const response = await api.get('/auth/verify', {
+      const response = await api.post('/auth/verify', {}, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (response.data.valid) {
@@ -253,7 +253,18 @@ const Admin = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('adminToken');
-      await api.post('/gallery', newGalleryItem, {
+      
+      // Prepare the data - convert empty eventId to null
+      const galleryData = {
+        ...newGalleryItem,
+        eventId: newGalleryItem.eventId.trim() || null,
+        description: newGalleryItem.description.trim()
+      };
+      
+      console.log('Sending gallery data:', galleryData); // Debug log
+      console.log('Available events:', events); // Debug log
+      console.log('Selected eventId:', newGalleryItem.eventId); // Debug log
+      await api.post('/gallery', galleryData, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStatus({ type: 'success', message: 'Gallery item added successfully!' });
@@ -265,11 +276,17 @@ const Admin = () => {
       });
       fetchData();
     } catch (error) {
-      console.error('Add gallery item error:', error.response?.data || error.message);
+      console.error('Add gallery item error:', error);
+      console.error('Response data:', error.response?.data);
+      console.error('Status code:', error.response?.status);
       setStatus({
         type: 'error',
         message: error.response?.data?.details ?
-          error.response.data.details.join(', ') :
+          (Array.isArray(error.response.data.details) ? 
+            error.response.data.details.join(', ') : 
+            error.response.data.details) :
+          error.response?.data?.error || 
+          error.response?.data?.message || 
           'Failed to add gallery item'
       });
     } finally {
@@ -935,14 +952,19 @@ const Admin = () => {
                     </div>
 
                     <div>
-                      <label className="block text-white mb-2 font-medium">Event ID</label>
-                      <input
-                        type="text"
+                      <label className="block text-white mb-2 font-medium">Related Event (Optional)</label>
+                      <select
                         value={newGalleryItem.eventId}
                         onChange={(e) => setNewGalleryItem({ ...newGalleryItem, eventId: e.target.value })}
                         className="w-[278px] px-4 py-3 bg-black/50 border-2 border-gray-600 rounded-lg text-white focus:border-neon-cyan focus:outline-none transition-colors text-sm sm:text-base"
-                        placeholder="Related event ID (optional)"
-                      />
+                      >
+                        <option value="">No event selected</option>
+                        {events.map((event) => (
+                          <option key={event._id} value={event._id}>
+                            {event.title} - {new Date(event.date).toLocaleDateString()}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 

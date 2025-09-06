@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const WorkingTerminal = () => {
+  const navigate = useNavigate();
   const [history, setHistory] = useState([]);
   const [currentInput, setCurrentInput] = useState('');
   const [isActive, setIsActive] = useState(false);
@@ -73,7 +75,10 @@ const WorkingTerminal = () => {
       '  code        - Random code snippet',
       '  fortune     - Get a coding fortune',
       '',
-      '💡 Tip: Tab completion coming soon!'
+      '� Secret Commands:',
+      '  admin       - Access administrative portal',
+      '',
+      '�💡 Tip: Tab completion coming soon!'
     ],
     
     ls: (args) => {
@@ -253,6 +258,32 @@ const WorkingTerminal = () => {
         '🌟 "Debugging is twice as hard as writing the code." - Truth Teller'
       ];
       return [fortunes[Math.floor(Math.random() * fortunes.length)]];
+    },
+
+    admin: () => {
+      setTimeout(() => {
+        setHistory(prev => [...prev, 
+          '',
+          '🔒 ACCESSING ADMINISTRATIVE PORTAL...',
+          '🔑 AUTHENTICATING...',
+          '✨ WELCOME CHIEF! 🚀',
+          '',
+          '🌟 You have successfully entered the command center.',
+          '⚡ Redirecting to admin dashboard...',
+          ''
+        ]);
+        
+        // Navigate to admin page after showing the welcome message
+        setTimeout(() => {
+          navigate('/admin');
+        }, 2000);
+      }, 500);
+      
+      return [
+        '🔐 ADMIN ACCESS INITIATED...',
+        '📡 Scanning authorization levels...',
+        '🎯 Access granted!'
+      ];
     }
   };
 

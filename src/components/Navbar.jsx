@@ -75,73 +75,20 @@ const Navbar = () => {
             <ul className="nav-links hidden lg:flex items-center">
               {navItems.map((item, index) => (
                 <li key={item.path} style={{ margin: '0 24px' }}>
-                  {item.path === '/contact' ? (
-                    <Link
-                      to={item.path}
-                      className="nav-link relative font-medium transition-all duration-300 text-white hover:text-neon-cyan"
-                      style={{
-                        fontSize: '16px',
-                        fontWeight: '500',
-                        letterSpacing: '0.5px'
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  ) : (
-                    <a
-                      href={item.path === '/' ? '#' : 
-                            item.path === '/events' ? '#events' : 
-                            item.path === '/team' ? '#team' : 
-                            item.path}
-                      onClick={(e) => {
-                        if (item.path === '/') {
-                          e.preventDefault();
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        } else if (item.path === '/events') {
-                          e.preventDefault();
-                          document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
-                        } else if (item.path === '/team') {
-                          e.preventDefault();
-                          document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
-                      className="nav-link relative font-medium transition-all duration-300 text-white hover:text-neon-cyan cursor-pointer"
-                      style={{
-                        fontSize: '16px',
-                        fontWeight: '500',
-                        letterSpacing: '0.5px'
-                      }}
-                    >
-                      {item.label}
-                    </a>
-                  )}
+                  <Link
+                    to={item.path}
+                    className="nav-link relative font-medium transition-all duration-300 text-white hover:text-neon-cyan"
+                    style={{
+                      fontSize: '16px',
+                      fontWeight: '500',
+                      letterSpacing: '0.5px'
+                    }}
+                  >
+                    {item.label}
+                  </Link>
                 </li>
               ))}
               
-              {/* Admin Button */}
-              <li style={{ marginLeft: '32px' }}>
-                <Link
-                  to="/admin"
-                  className="admin-button relative transition-all duration-300 flex items-center justify-center"
-                  style={{
-                    width: '120px',
-                    height: '38px',
-                    background: 'linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(255, 0, 255, 0.3))',
-                    border: '2px solid #ff00ff',
-                    color: '#ff00ff',
-                    borderRadius: '19px',
-                    fontSize: '14px',
-                    fontWeight: '600',
-                    textDecoration: 'none',
-                    backdropFilter: 'blur(10px)',
-                    boxShadow: '0 4px 15px rgba(255, 0, 255, 0.2)',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5px'
-                  }}
-                >
-                  Admin
-                </Link>
-              </li>
             </ul>
 
             {/* Mobile Menu Toggle */}
@@ -164,7 +111,7 @@ const Navbar = () => {
       <MobileMenu 
         isOpen={isMobileMenuOpen} 
         onClose={closeMobileMenu} 
-        navItems={[...navItems, { path: '/admin', label: 'Admin', icon: '🛠️', isAdmin: true }]}
+        navItems={navItems}
       />
     </>
   );

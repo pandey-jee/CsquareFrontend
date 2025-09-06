@@ -133,7 +133,7 @@ const MobileMenu = ({ isOpen, onClose, navItems }) => {
                           {item.label}
                         </span>
                       </Link>
-                    ) : item.path === '/contact' ? (
+                    ) : (
                       <Link
                         to={item.path}
                         onClick={handleLinkClick}
@@ -144,32 +144,6 @@ const MobileMenu = ({ isOpen, onClose, navItems }) => {
                           {item.label}
                         </span>
                       </Link>
-                    ) : (
-                      <a
-                        href={item.path === '/' ? '#' : 
-                              item.path === '/events' ? '#events' : 
-                              item.path === '/team' ? '#team' : 
-                              item.path}
-                        onClick={(e) => {
-                          if (item.path === '/') {
-                            e.preventDefault();
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          } else if (item.path === '/events') {
-                            e.preventDefault();
-                            document.getElementById('events')?.scrollIntoView({ behavior: 'smooth' });
-                          } else if (item.path === '/team') {
-                            e.preventDefault();
-                            document.getElementById('team')?.scrollIntoView({ behavior: 'smooth' });
-                          }
-                          handleLinkClick();
-                        }}
-                        className="block px-4 py-3 rounded-lg text-lg font-medium transition-all duration-300 text-white hover:bg-white hover:bg-opacity-10 hover:text-neon-cyan"
-                      >
-                        <span className="flex items-center gap-3">
-                          {item.icon && <span>{item.icon}</span>}
-                          {item.label}
-                        </span>
-                      </a>
                     )}
                   </motion.li>
                 ))}

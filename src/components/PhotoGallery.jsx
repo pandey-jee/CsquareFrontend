@@ -235,49 +235,8 @@ const PhotoGallery = () => {
           ›
         </button>
       </div>
-                className="gallery-caption absolute bottom-0 left-0 right-0"
-                style={{
-                  background: 'linear-gradient(transparent, rgba(0, 0, 0, 0.9))',
-                  color: '#ffffff',
-                  padding: '30px 25px 20px',
-                  fontFamily: 'Orbitron, monospace',
-                  fontSize: '1.1rem',
-                  fontWeight: '600',
-                  textShadow: '0 0 10px rgba(0, 255, 255, 0.5)',
-                  borderRadius: '0 0 18px 18px'
-                }}
-              >
-                {image.caption}
-              </div>
-            </div>
-          ))}
-        </div>
 
-        {/* Next Button */}
-        <button
-          onClick={nextSlide}
-          className="gallery-btn"
-          style={{
-            background: 'rgba(0, 0, 0, 0.8)',
-            border: '2px solid #00ffff',
-            borderRadius: '50%',
-            width: '60px',
-            height: '60px',
-            color: '#00ffff',
-            fontSize: '2rem',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            transition: 'all 0.3s ease',
-            backdropFilter: 'blur(10px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 10
-          }}
-        >
-          ›
-        </button>
-      </div>
+      {/* Gallery Dots */}
 
       {/* Gallery Dots */}
       <div 

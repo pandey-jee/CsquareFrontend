@@ -380,3 +380,108 @@
     padding: 0 0.75rem !important;
   }
 }
+
+/* Center alignment for small devices */
+@media (max-width: 768px) {
+  /* General centering for all sections */
+  section {
+    text-align: center !important;
+  }
+  
+  .container-custom {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  
+  /* Hero section centering */
+  .hero-content {
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  
+  .hero-left,
+  .hero-right {
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+  
+  /* Achievements section centering */
+  .achievements-grid,
+  .grid {
+    justify-items: center !important;
+  }
+  
+  .card {
+    text-align: center !important;
+  }
+  
+  /* Events and Teams sections centering */
+  .events-track,
+  .team-track {
+    justify-content: flex-start !important; /* Allow horizontal scroll but start centered */
+  }
+  
+  /* Navigation and headings centering */
+  h1, h2, h3, h4, h5, h6 {
+    text-align: center !important;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    margin: 0 auto !important;
+    display: block !important;
+    width: fit-content !important;
+  }
+  
+  /* Form centering */
+  form {
+    text-align: center !important;
+  }
+  
+  input, textarea, select {
+    margin: 0 auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small devices - more aggressive centering */
+  .container-custom {
+    padding: 0 20px !important;
+    text-align: center !important;
+  }
+  
+  /* Ensure all text is centered */
+  .text-left {
+    text-align: center !important;
+  }
+  
+  /* Center navigation elements */
+  .navbar,
+  .nav {
+    justify-content: center !important;
+  }
+  
+  /* Center footer content */
+  footer {
+    text-align: center !important;
+  }
+  
+  footer * {
+    text-align: center !important;
+  }
+  
+  /* Admin panel centering */
+  .admin-tabs,
+  .admin-form {
+    text-align: center !important;
+  }
+  
+  /* Mobile menu centering */
+  .mobile-menu {
+    text-align: center !important;
+  }
+}

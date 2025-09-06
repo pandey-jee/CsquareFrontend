@@ -194,7 +194,7 @@ const Hero = () => {
       </div>
 
       {/* CSS Keyframes */}
-      <style jsx>{`
+  <style>{`
         @keyframes logoFloat {
           0%, 100% { transform: rotateX(5deg) rotateY(5deg) translateY(0px); }
           50% { transform: rotateX(5deg) rotateY(5deg) translateY(-10px); }

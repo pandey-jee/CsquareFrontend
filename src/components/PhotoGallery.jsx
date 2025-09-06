@@ -87,10 +87,10 @@ const PhotoGallery = () => {
 
   return (
     <div 
-      className="photo-gallery-container relative"
-      style={{ marginBottom: '80px', minHeight: '500px' }}
+      className="photo-gallery-container relative flex flex-col items-center justify-center"
+      style={{ marginBottom: '80px', minHeight: '500px', width: '100%' }}
     >
-      <div className="gallery-slider-wrapper relative flex items-center gap-8">
+      <div className="gallery-slider-wrapper relative flex items-center gap-8 w-full max-w-4xl mx-auto">
         {/* Previous Button - Hidden on mobile */}
         <button
           onClick={prevSlide}
@@ -118,12 +118,17 @@ const PhotoGallery = () => {
 
         {/* Gallery Container */}
         <div 
-          className="photo-gallery overflow-hidden flex-1 relative md:block"
+          className="photo-gallery overflow-hidden flex-1 relative md:block flex items-center justify-center"
           style={{
             borderRadius: '20px',
             boxShadow: '0 0 30px rgba(0, 255, 255, 0.3)',
             border: '2px solid transparent',
-            background: 'linear-gradient(45deg, #00ffff, #ff00ff) border-box'
+            background: 'linear-gradient(45deg, #00ffff, #ff00ff) border-box',
+            minHeight: '400px',
+            maxHeight: '400px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
           }}
         >
           {/* Mobile Touch Scroll Gallery */}
@@ -145,7 +150,14 @@ const PhotoGallery = () => {
                   className="gallery-image w-full h-64 object-cover"
                   style={{
                     borderRadius: '18px',
-                    transition: 'transform 0.3s ease'
+                    transition: 'transform 0.3s ease',
+                    objectFit: 'cover',
+                    width: '100%',
+                    height: '256px',
+                    display: 'block',
+                    aspectRatio: '4/3',
+                    background:'#222',
+                    objectPosition:'center'
                   }}
                 />
                 <div 
@@ -187,7 +199,11 @@ const PhotoGallery = () => {
                     height: '400px',
                     objectFit: 'cover',
                     borderRadius: '18px',
-                    transition: 'transform 0.3s ease'
+                    transition: 'transform 0.3s ease',
+                    display: 'block',
+                    aspectRatio: '4/3',
+                    background:'#222',
+                    objectPosition:'center'
                   }}
                 />
                 <div 

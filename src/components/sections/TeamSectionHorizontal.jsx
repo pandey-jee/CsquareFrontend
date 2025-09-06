@@ -139,10 +139,8 @@ const TeamSection = () => {
                   key={member.id}
                   className="team-member-card flex-shrink-0 relative w-[clamp(240px,80vw,320px)] h-[clamp(360px,55vh,440px)]"
                   style={{ scrollSnapAlign: 'start' }}
-                >
-                  {/* Card Background */}
-                  <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border-2 border-gray-700 hover:border-neon-cyan transition-all duration-300 group flex flex-col">
-
+                  >
+                    <div className="w-full h-full bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border-2 border-gray-700 hover:border-neon-cyan transition-all duration-300 group flex flex-col items-center justify-center cursor-pointer" style={{minWidth:'220px',maxWidth:'240px',height:'340px',position:'relative'}} onClick={() => setActiveMember(member)}>
                     {/* Member Photo Section - 3/4 of the card height */}
                     <div className="relative flex-[3] overflow-hidden">
                       {member.photo ? (
@@ -150,6 +148,8 @@ const TeamSection = () => {
                           src={member.photo}
                           alt={member.name}
                           className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
+                          draggable={false}
+                          style={{width:'100%',height:'220px',objectFit:'cover',borderRadius:'18px',display:'block'}}
                           onError={(e) => {
                             e.target.style.display = 'none';
                             e.target.parentElement.querySelector('.initials-fallback').style.display = 'flex';
@@ -157,7 +157,7 @@ const TeamSection = () => {
                         />
                       ) : null}
                       <div className={`initials-fallback ${member.photo ? 'hidden' : 'flex'} w-full h-full bg-gradient-to-br from-neon-cyan/20 to-neon-magenta/20 items-center justify-center`}>
-                        <span className="text-6xl font-bold text-white">
+                        <span className="text-6xl font-bold text-white" style={{height:'220px',display:'flex',alignItems:'center',justifyContent:'center'}}>
                           {member.initials || member.name.split(' ').map(n => n[0]).join('')}
                         </span>
                       </div>
@@ -181,8 +181,38 @@ const TeamSection = () => {
                         <p className="text-gray-300 text-xs sm:text-sm leading-relaxed line-clamp-2 group-hover:text-gray-200 transition-colors duration-300">
                           {member.bio}
                         </p>
+                        {member.linkedin && (
+                          <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block px-3 py-1 rounded-full bg-neon-cyan text-black font-semibold text-xs hover:bg-neon-magenta transition-colors duration-300">
+                            LinkedIn
+                          </a>
+                        )}
                       </div>
 
+      {/* Popup for active member */}
+      {activeMember && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70" onClick={() => setActiveMember(null)}>
+          <div className="bg-gray-900 rounded-2xl p-8 max-w-md w-full relative" onClick={e => e.stopPropagation()} style={{boxShadow:'0 0 40px #00ffff88'}}>
+            <button className="absolute top-3 right-3 text-neon-cyan text-2xl font-bold" onClick={() => setActiveMember(null)}>&times;</button>
+            <div className="flex flex-col items-center">
+              {activeMember.photo && (
+                <img src={activeMember.photo} alt={activeMember.name} className="w-32 h-32 object-cover rounded-full mb-4" style={{objectFit:'cover'}} />
+              )}
+              <h2 className="text-2xl font-bold text-white mb-2">{activeMember.name}</h2>
+              <p className="text-neon-magenta text-base font-medium mb-2">{activeMember.position}</p>
+              <p className="text-gray-300 text-sm mb-4">{activeMember.bio}</p>
+              {activeMember.linkedin && (
+                <a href={activeMember.linkedin} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block px-4 py-2 rounded-full bg-neon-cyan text-black font-semibold text-sm hover:bg-neon-magenta transition-colors duration-300">
+                  LinkedIn
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+// Add state for active member popup
+import { useState } from 'react';
+// ...existing code...
+const [activeMember, setActiveMember] = useState(null);
                       {/* Social Links */}
                       {(member.email || member.linkedin || member.github) && (
                         <div className="flex justify-start space-x-3 sm:space-x-4 mt-2">

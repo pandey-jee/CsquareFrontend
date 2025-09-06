@@ -76,7 +76,7 @@ const PhotoGallery = () => {
     return (
       <div 
         className="photo-gallery-container relative"
-        style={{ marginBottom: '80px', minHeight: '500px' }}
+        style={{ marginBottom: '0px', minHeight: '500px' }}
       >
         <div className="flex items-center justify-center h-96">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-neon-cyan"></div>

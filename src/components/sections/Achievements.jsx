@@ -6,25 +6,25 @@ const Achievements = () => {
       icon: '🏆',
       title: 'Competition Winners',
       description: 'Multiple victories in cybersecurity and programming competitions',
-      stats: '15+ Awards'
+      stats: '5+ Awards'
     },
     {
       icon: '👥',
       title: 'Active Members',
       description: 'Growing community of passionate tech enthusiasts',
-      stats: '200+ Members'
+      stats: '400+ Members'
     },
     {
       icon: '🎯',
       title: 'Projects Completed',
       description: 'Real-world projects solving actual problems',
-      stats: '50+ Projects'
+      stats: '10+ Projects'
     },
     {
       icon: '🎓',
       title: 'Workshops Conducted',
       description: 'Educational sessions covering latest technologies',
-      stats: '100+ Sessions'
+      stats: '30+ Sessions'
     },
     {
       icon: '🤝',
@@ -108,18 +108,18 @@ const Achievements = () => {
         </div>
 
         {/* Stats Bar */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8"
+          className="mt-20 grid grid-cols-2 md:grid-cols-3 gap-8"
         >
           {[
-            { label: 'Years Active', value: '5+' },
+            { label: 'Years Active', value: '1+' },
             { label: 'Technologies Mastered', value: '50+' },
-            { label: 'Success Rate', value: '98%' },
-            { label: 'Global Reach', value: '10+ Countries' }
+            { label: 'Success Rate', value: '98%' }
+            
           ].map((stat, index) => (
             <div key={index} className="text-center">
               <div className="text-3xl font-orbitron font-bold text-neon-cyan mb-2">
@@ -130,7 +130,7 @@ const Achievements = () => {
               </div>
             </div>
           ))}
-        </motion.div>
+        </motion.div> */}
 
         {/* Call to Action */}
         <motion.div

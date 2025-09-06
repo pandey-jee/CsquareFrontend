@@ -54,16 +54,17 @@ const Navbar = () => {
           >
             <Link to="/" className="flex items-center">
               <div className="logo relative">
-                <img 
-                  src="/C Square White.svg" 
-                  alt="C-Square" 
-                  className="w-15 h-10"
+                {/* <img
+                  src="/CSquareClubLogo.png"
+                  alt="C-Square Club"
+                  className="w-12 h-12 object-contain"
                   style={{
                     filter: 'drop-shadow(0 0 20px rgba(0, 255, 255, 0.8))',
                     transition: 'all 0.3s ease',
                     animation: 'logoGlow 3s ease infinite'
                   }}
-                />
+                /> */}
+                <h2 className='text-2xl font-bold text-white'>C Square</h2>
               </div>
             </Link>
           </motion.div>

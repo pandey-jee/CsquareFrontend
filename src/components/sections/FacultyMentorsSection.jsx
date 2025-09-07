@@ -29,7 +29,7 @@ const facultyMentors = [
     id: 3,
     name: 'Dr. (Prof.) Jaspreet Singh Batth',
     photo: jaspreetSinghBatth,
-    designation: 'Professor',
+    designation: 'Batchhead CSE 2nd Year',
     bio: 'Renowned researcher and educator with expertise in advanced computing technologies and student mentorship.',
     linkedin: 'https://linkedin.com/in/jaspreet-singh-batth',
   },

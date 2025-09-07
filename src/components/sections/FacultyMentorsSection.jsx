@@ -6,7 +6,7 @@ import puneetKumar from '../../assets/faculty-mentors/puneet-kumar.jpeg';
 import gurmeetKaur from '../../assets/faculty-mentors/gurmeet-kaur.jpeg';
 import dilshadKaur from '../../assets/faculty-mentors/dilshad-kau.jpeg';
 import komalpreetSaini from '../../assets/faculty-mentors/komalpreet-saini.jpeg';
-import jaspreetSinghBatth from '../../assets/faculty-mentors/jaspreet-singh-batth.jpeg';
+import jaspreetSinghBatth from '../../assets/faculty-mentors/jaspreet-Singh-Batth.jpeg';
 
 const facultyMentors = [
   {

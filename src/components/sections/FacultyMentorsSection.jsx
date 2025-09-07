@@ -6,51 +6,58 @@ import puneetKumar from '../../assets/faculty-mentors/puneet-kumar.jpeg';
 import gurmeetKaur from '../../assets/faculty-mentors/gurmeet-kaur.jpeg';
 import dilshadKaur from '../../assets/faculty-mentors/dilshad-kau.jpeg';
 import komalpreetSaini from '../../assets/faculty-mentors/komalpreet-saini.jpeg';
+import jaspreetSinghBatth from '../../assets/faculty-mentors/jaspreet-singh-batth.jpeg';
 
 const facultyMentors = [
   {
     id: 1,
-    name: 'Dr. Sachin Ahuja',
-  photo: sachinAhuja,
+    name: 'Dr. (Prof.) Sachin Ahuja',
+    photo: sachinAhuja,
     designation: 'Executive Director',
     bio: 'Guiding the club with years of academic and industry experience in Computer Science.',
     linkedin: 'https://www.linkedin.com/in/dr-sachin-ahuja-0885a235/',
   },
   {
     id: 2,
-    name: 'Dr. Puneet Kumar',
-  photo: puneetKumar,
+    name: 'Dr. (Prof.) Puneet Kumar',
+    photo: puneetKumar,
     designation: 'Associate Director',
     bio: 'Passionate about student development and research in AI and Data Science.',
     linkedin: 'https://www.linkedin.com/in/dr-puneet-kumar-2a84b531/',
   },
   {
     id: 3,
-    name: 'Gurmeet Kaur Saini',
-  photo: gurmeetKaur,
+    name: 'Dr. (Prof.) Jaspreet Singh Batth',
+    photo: jaspreetSinghBatth,
+    designation: 'Professor',
+    bio: 'Renowned researcher and educator with expertise in advanced computing technologies and student mentorship.',
+    linkedin: 'https://linkedin.com/in/jaspreet-singh-batth',
+  },
+  {
+    id: 4,
+    name: 'Dr. Gurmeet Kaur Saini',
+    photo: gurmeetKaur,
     designation: 'Associate Professor',
     bio: 'Expert in software engineering and a constant motivator for the club.',
     linkedin: 'https://www.linkedin.com/in/gurmeet-kaur-saini-4b6815213/',
   },
   {
-    id: 4,
-    name: 'Mrs Dilshad kaur',
-  photo: dilshadKaur,
+    id: 5,
+    name: 'Er. Dilshad Kaur',
+    photo: dilshadKaur,
     designation: 'Faculty Advisor',
     bio: 'Encourages innovation and creativity among students.',
     linkedin: 'https://www.linkedin.com/in/dilshad-kaur-201158254/',
   },
   {
-    id: 5,
-    name: 'Mrs Komalpreet Saini',
-  photo: komalpreetSaini,
+    id: 6,
+    name: 'Er. Kamalpreet Saini',
+    photo: komalpreetSaini,
     designation: 'Faculty Co-Advisor',
     bio: 'Dedicated to bridging the gap between academia and industry.',
     linkedin: 'https://www.linkedin.com/in/komalpreet-saini-8a239664/',
   },
-];
-
-const FacultyMentorsSection = () => {
+];const FacultyMentorsSection = () => {
   const trackRef = useRef(null);
 
   const scrollLeftBtn = () => {

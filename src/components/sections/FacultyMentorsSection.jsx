@@ -140,8 +140,8 @@ const FacultyMentorsSection = () => {
                       <img
                         src={mentor.photo}
                         alt={mentor.name}
-                        className="w-full h-full object-cover object-center transition-transform duration-300 group-hover:scale-110"
-                        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                        className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-110"
+                        style={{ objectFit: 'contain', width: '100%', height: '100%' }}
                         onError={e => {
                           e.target.classList.add('hidden');
                           const fallback = e.target.parentElement.querySelector('.initials-fallback');

@@ -2,6 +2,7 @@ import Hero from '../components/sections/Hero';
 import Achievements from '../components/sections/Achievements';
 import EventsSectionHorizontal from '../components/sections/EventsSectionHorizontal';
 import TeamSectionHorizontal from '../components/sections/TeamSectionHorizontal';
+import FacultyMentorsSection from '../components/sections/FacultyMentorsSection';
 import PhotoGalleryResponsive from '../components/PhotoGalleryResponsive';
 
 const Home = () => {
@@ -17,8 +18,9 @@ const Home = () => {
         </div>
       </section>
       
-      <EventsSectionHorizontal />
-      <TeamSectionHorizontal />
+  <EventsSectionHorizontal />
+  <FacultyMentorsSection />
+  <TeamSectionHorizontal />
     </div>
   );
 };
